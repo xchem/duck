@@ -1,0 +1,9 @@
+name: prepare
+channels:
+  - openbabel
+  - omnia 
+  - conda-forge
+dependencies:
+  - python=3.4
+  - yank
+  - openbabel
