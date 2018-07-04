@@ -2,7 +2,11 @@ name: prepare
 channels:
   - omnia 
   - conda-forge
+  - rbetz
+  - rdkit
 dependencies:
   - python=3.4
   - yank
+  - rdkit
+  - vmd-python 
   - openbabel
