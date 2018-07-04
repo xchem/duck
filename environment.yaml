@@ -1,6 +1,5 @@
 name: prepare
 channels:
-  - openbabel
   - omnia 
   - conda-forge
 dependencies:
