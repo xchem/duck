@@ -5,7 +5,7 @@ from rdkit.Chem import AllChem
 from rdkit import Chem
 # Set the names
 prefix = sys.argv[1]
-mol_file = prefix + ".mol"
+mol_file = sys.argv[2]
 # Get the charge
 rd_mol = Chem.MolFromMolFile(mol_file)
 net_charge = AllChem.GetFormalCharge(rd_mol)
