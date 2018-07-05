@@ -4,6 +4,7 @@ import openbabel
 import re
 import string
 import os
+import shutil
 
 
 def rename_residues(file_mol2,new_output_file):
@@ -574,9 +575,11 @@ def surface_chunk_intesection(file_in_chunk_pdb,file_in_protein_mol2,file_out_li
                     output.write(str(xyz) + ' ')
             output.write('0.25\n')
         output.close()
+        return True
     else:
         output = open(file_out_list, 'w')
         output.close()
+        return False
 
 
 
@@ -677,12 +680,15 @@ out_f.close()
 evaltcl('play run.tcl')
 
 #patching gaps in structure by selecting additional residues
-surface_chunk_intesection("tmp_"+file_out_name,prot_mol2,"temp2.txt")
+found_split = surface_chunk_intesection("tmp_"+file_out_name,prot_mol2,"temp2.txt")
 
-out_f = open("run_two.tcl","w")
-out_f.write(return_rdock_tcl(prot_mol2,"tmp2_" + file_out_name, "temp2.txt", str(index), str(cutoff)))
-out_f.close()
-evaltcl('play run_two.tcl')
+if found_split:
+    out_f = open("run_two.tcl","w")
+    out_f.write(return_rdock_tcl(prot_mol2,"tmp2_" + file_out_name, "temp2.txt", str(index), str(cutoff)))
+    out_f.close()
+    evaltcl('play run_two.tcl')
+else:
+    shutil.copyfile(prot_mol2,"tmp2_" + file_out_name)
 
 #spliting chains and renamich caps
 split_chains_rename_caps("tmp2_" + file_out_name, "tmp.pdb")
