@@ -1,6 +1,6 @@
 import sys
-from VMD import evaltcl
-
+from vmd import evaltcl
+import openbabel
 
 def return_tcl(prot_in,prot_out,cut_off,atom_index):
   return '''###Arguments given from a command line are:
@@ -121,14 +121,13 @@ set chunk_final [atomselect 0 "index $index1 $index2 $index3 and not hydrogen"]
 
 #saving selected residues
 $chunk_final writepdb $file_out
-quit    """
-
+quit    '''
 
 # Define the input variables
 prot_pdb = sys.argv[1]
 prot_mol2 = prot_pdb.replace(".pdb",".mol2")
 file_out_name=prot_pdb.replace(".pdb","out.mol2")
-index = 1234#sys.argv[2]
+index = 1561#sys.argv[2]
 cutoff = 6 #sys.argv[3]
 
 # Convert the PDB to mol2 
@@ -140,4 +139,9 @@ mol.AddHydrogens()
 obConversion.WriteFile(mol, prot_mol2)
 
 # Convert into a VMD command from within Python
-evaltcl(return_tcl(prot_mol2,file_out,cutoff,index))
+
+out_f = open("run.tcl","w")
+out_f.write(return_tcl(prot_mol2,file_out_name,str(cutoff),str(index)))
+out_f.close()
+evaltcl('play run.tcl')
+
