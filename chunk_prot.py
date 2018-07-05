@@ -680,7 +680,7 @@ evaltcl('play run.tcl')
 surface_chunk_intesection("tmp_"+file_out_name,prot_mol2,"temp2.txt")
 
 out_f = open("run_two.tcl","w")
-out_f.write(return_rdock_tcl(prot_mol2,"tmp2_" + file_out_name, "temp2.txt", index, cutoff))
+out_f.write(return_rdock_tcl(prot_mol2,"tmp2_" + file_out_name, "temp2.txt", str(index), str(cutoff)))
 out_f.close()
 evaltcl('play run_two.tcl')
 
