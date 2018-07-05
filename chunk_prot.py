@@ -197,6 +197,17 @@ quit
 '''
 
 
+def return_rdock_tcl_no_split(prot_mol2, tmp2_file_out_name):
+    return '''###Arguments given from a command line are:
+###vmd -dispdev text -e makechunk.tlc -args in_file_name out_file_name cavity_file index_ref_at cutoff
+set file_name "'''+prot_mol2+'''"
+set file_out "'''+tmp2_file_out_name+'''"
+mol new $file_name
+#saving selected residues
+writepdb $file_out
+quit
+'''
+
 def return_tcl(prot_in,prot_out,cut_off,atom_index):
   return '''###Arguments given from a command line are:
 ###vmd -dispdev text -e make_chunk_2.tlc -args in_file_name_mol2 out_file_name.pdb index_ref_at cutoff
@@ -688,7 +699,10 @@ if found_split:
     out_f.close()
     evaltcl('play run_two.tcl')
 else:
-    shutil.copyfile(prot_mol2,"tmp2_" + file_out_name)
+    out_f = open("run_two.tcl","w")
+    out_f.write(return_rdock_tcl_no_split(prot_mol2,"tmp2_" + file_out_name))
+    out_f.close()
+    evaltcl('play run_two.tcl')
 
 #spliting chains and renamich caps
 split_chains_rename_caps("tmp2_" + file_out_name, "tmp.pdb")
