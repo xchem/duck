@@ -399,10 +399,13 @@ def get_bonds_mol2(file_mol2):  # get bond coordinates and assigns them to resid
         file_txt.append(line.strip().split())
 
     f.close()
-    start_atom = file_txt.index(['@<TRIPOS>ATOM']) + 1
-    stop_atom = file_txt.index(['@<TRIPOS>BOND'])
-    start_bond = stop_atom + 1
-    stop_bond = file_txt.index(['@<TRIPOS>SUBSTRUCTURE'])
+    try:
+        start_atom = file_txt.index(['@<TRIPOS>ATOM']) + 1
+        stop_atom = file_txt.index(['@<TRIPOS>BOND'])
+        start_bond = stop_atom + 1
+        stop_bond = file_txt.index(['@<TRIPOS>SUBSTRUCTURE'])
+    except ValueError:
+        return None
 
     bonds = []
     for line in file_txt[start_bond: stop_bond]:
@@ -502,79 +505,78 @@ def surface_chunk_intesection(file_in_chunk_pdb,file_in_protein_mol2,file_out_li
 
     atoms = get_atoms(file_in_chunk_pdb)
     bond_list = get_bonds_mol2(file_in_protein_mol2)
+    if bond_list:
+        atoms_2 = narrow_sel2(atoms)
+        triang = triangles(atoms_2)
+        intersections = intersec(triang, bond_list)
+        list_add_res = []
+        for i in intersections:
+            if i[2] not in list_add_res:
+                list_add_res.append(i[2])
 
-    atoms_2 = narrow_sel2(atoms)
-    triang = triangles(atoms_2)
+            if i[3] not in list_add_res:
+                list_add_res.append(i[3])
+        output = open(file_out_list, 'w')
+        for i in list_add_res:
+            output.write(i + '\n')
+        output.close()
 
-    intersections = intersec(triang, bond_list)
+        #########saving graphical outputs
+        name_spheres = 'spheres_' + file_in_chunk_pdb.replace('.pdb', '.bild')
+        name_triangle = 'triangle_' + file_in_chunk_pdb.replace('.pdb', '.bild')
+        name_intersec = 'intersec_' + file_in_chunk_pdb.replace('.pdb', '.bild')
+        name_bone = 'bone_' + file_in_chunk_pdb.replace('.pdb', '.bild')
 
-    list_add_res = []
-    for i in intersections:
-        if i[2] not in list_add_res:
-            list_add_res.append(i[2])
+        color = 'green'
 
-        if i[3] not in list_add_res:
-            list_add_res.append(i[3])
+        output = open(name_spheres, 'w')
+        for i in atoms_2:
+            output.write('.color ' + color + '\n')
+            output.write('.sphere ')
+            for ii in i:
+                output.write(str(ii) + ' ')
+            output.write('1.0 \n')
+        output.close()
 
-    output = open(file_out_list, 'w')
-    for i in list_add_res:
-        output.write(i + '\n')
+        output = open(name_triangle, 'w')
+        for i in triang:
+            output.write('.color ' + color + '\n')
+            output.write('.polygon ')
+            for ii in i:
+                for iii in ii:
+                    output.write(str(iii) + ' ')
+            output.write('\n')
+        output.close()
 
-    output.close()
+        output = open(name_bone, 'w')
+        for tri in triang:
+            output.write('.color ' + color + '\n')
+            output.write(
+                '.cylinder ' + str(tri[0][0]) + ' ' + str(tri[0][1]) + ' ' + str(tri[0][2]) + ' ' + str(tri[1][0]) + ' ' + str(
+                    tri[1][1]) + ' ' + str(tri[1][2]) + ' 0.1\n')
+            output.write('.color ' + color + '\n')
+            output.write(
+                '.cylinder ' + str(tri[0][0]) + ' ' + str(tri[0][1]) + ' ' + str(tri[0][2]) + ' ' + str(tri[2][0]) + ' ' + str(
+                    tri[2][1]) + ' ' + str(tri[2][2]) + ' 0.1\n')
+            output.write('.color ' + color + '\n')
+            output.write(
+                '.cylinder ' + str(tri[2][0]) + ' ' + str(tri[2][1]) + ' ' + str(tri[2][2]) + ' ' + str(tri[1][0]) + ' ' + str(
+                    tri[1][1]) + ' ' + str(tri[1][2]) + ' 0.1\n')
+        output.close()
 
-    #########saving graphical outputs
-    name_spheres = 'spheres_' + file_in_chunk_pdb.replace('.pdb', '.bild')
-    name_triangle = 'triangle_' + file_in_chunk_pdb.replace('.pdb', '.bild')
-    name_intersec = 'intersec_' + file_in_chunk_pdb.replace('.pdb', '.bild')
-    name_bone = 'bone_' + file_in_chunk_pdb.replace('.pdb', '.bild')
-
-    color = 'green'
-
-    output = open(name_spheres, 'w')
-    for i in atoms_2:
-        output.write('.color ' + color + '\n')
-        output.write('.sphere ')
-        for ii in i:
-            output.write(str(ii) + ' ')
-        output.write('1.0 \n')
-    output.close()
-
-    output = open(name_triangle, 'w')
-    for i in triang:
-        output.write('.color ' + color + '\n')
-        output.write('.polygon ')
-        for ii in i:
-            for iii in ii:
-                output.write(str(iii) + ' ')
-        output.write('\n')
-    output.close()
-
-    output = open(name_bone, 'w')
-    for tri in triang:
-        output.write('.color ' + color + '\n')
-        output.write(
-            '.cylinder ' + str(tri[0][0]) + ' ' + str(tri[0][1]) + ' ' + str(tri[0][2]) + ' ' + str(tri[1][0]) + ' ' + str(
-                tri[1][1]) + ' ' + str(tri[1][2]) + ' 0.1\n')
-        output.write('.color ' + color + '\n')
-        output.write(
-            '.cylinder ' + str(tri[0][0]) + ' ' + str(tri[0][1]) + ' ' + str(tri[0][2]) + ' ' + str(tri[2][0]) + ' ' + str(
-                tri[2][1]) + ' ' + str(tri[2][2]) + ' 0.1\n')
-        output.write('.color ' + color + '\n')
-        output.write(
-            '.cylinder ' + str(tri[2][0]) + ' ' + str(tri[2][1]) + ' ' + str(tri[2][2]) + ' ' + str(tri[1][0]) + ' ' + str(
-                tri[1][1]) + ' ' + str(tri[1][2]) + ' 0.1\n')
-    output.close()
-
-    color_2 = 'orange'
-    output = open(name_intersec, 'w')
-    for i in intersections:
-        output.write('.color ' + color_2 + '\n')
-        output.write('.cylinder ')
-        for coor in i[:2]:
-            for xyz in coor:
-                output.write(str(xyz) + ' ')
-        output.write('0.25\n')
-    output.close()
+        color_2 = 'orange'
+        output = open(name_intersec, 'w')
+        for i in intersections:
+            output.write('.color ' + color_2 + '\n')
+            output.write('.cylinder ')
+            for coor in i[:2]:
+                for xyz in coor:
+                    output.write(str(xyz) + ' ')
+            output.write('0.25\n')
+        output.close()
+    else:
+        output = open(file_out_list, 'w')
+        output.close()
 
 
 
