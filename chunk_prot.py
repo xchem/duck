@@ -2,13 +2,13 @@ import sys
 from VMD import evaltcl
 
 
-def return_tcl(prot_in,prot_out,cut_off):
+def return_tcl(prot_in,prot_out,cut_off,atom_index):
   return '''###Arguments given from a command line are:
 ###vmd -dispdev text -e make_chunk_2.tlc -args in_file_name_mol2 out_file_name.pdb index_ref_at cutoff
 
 set file_name "'''+prot_in+'''"
 set file_out "'''+prot_out+'''"
-set ref_at_0 [lindex $argv 2]
+set ref_at_0 '''+atom_index+'''
 #renumerate because vmd starts with 0
 set ref_at [expr $ref_at_0 - 1]
 set cutoff '''+cut_off+'''
@@ -140,4 +140,4 @@ mol.AddHydrogens()
 obConversion.WriteFile(mol, prot_mol2)
 
 # Convert into a VMD command from within Python
-evaltcl(return_tcl(prot_mol2,file_out,cutoff))
+evaltcl(return_tcl(prot_mol2,file_out,cutoff,index))
