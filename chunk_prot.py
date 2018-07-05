@@ -670,7 +670,7 @@ obConversion.WriteFile(mol, prot_mol2)
 
 # Run the first TCL script
 out_f = open("run.tcl","w")
-out_f.write(return_tcl(prot_mol2,file_out_name,str(cutoff),str(index)))
+out_f.write(return_tcl(prot_mol2,"tmp_"+file_out_name,str(cutoff),str(index)))
 out_f.close()
 evaltcl('play run.tcl')
 
