@@ -1,4 +1,4 @@
-import sys
+import sys,os
 import openmoltools as moltools
 import openbabel
 from rdkit.Chem import AllChem
@@ -19,4 +19,4 @@ mol = openbabel.OBMol()
 obConversion.ReadFile(mol, mol_file)
 mol.AddHydrogens()
 obConversion.WriteFile(mol, mol2_file)
-moltools.amber.run_antechamber(prefix, mol2_file,net_charge=net_charge,gaff_mol2_filename=out_file,frcmod_filename=frcmod_file)
+os.system("antechamber -i "+mol2_file+" -fi mol2 -o "+out_file+" -fo mol2 -at sybyl  -c bcc")
