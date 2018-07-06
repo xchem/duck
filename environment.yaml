@@ -12,5 +12,4 @@ dependencies:
   - vmd-python 
   - openbabel
   - pymol
-  - openforcefield
   - pdbfixer
