@@ -8,7 +8,7 @@ prot_file = "MURD-x0349_apo.pdb"
 out_save = "protein_out.pdb"
 prot_protein_chunk = "protein_chunk_prot.pdb"
 out_obj = "out_sele"
-cutoff = 8
+cutoff = 12
 
 def return_tleap(out_save,prot_protein_chunk):
     return """source /opt/conda/envs/prepare/dat/leap/cmd/leaprc.ff14SB.redq
