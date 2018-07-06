@@ -690,6 +690,7 @@ out_f.write(return_tcl(prot_mol2,"tmp_"+file_out_name,str(cutoff),str(index)))
 out_f.close()
 evaltcl('play run.tcl')
 
+
 #patching gaps in structure by selecting additional residues
 found_split = surface_chunk_intesection("tmp_"+file_out_name,prot_mol2,"temp2.txt")
 
