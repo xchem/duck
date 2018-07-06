@@ -1,5 +1,6 @@
 name: prepare
 channels:
+  - schrodinger
   - omnia 
   - conda-forge
   - rbetz
@@ -10,3 +11,6 @@ dependencies:
   - rdkit
   - vmd-python 
   - openbabel
+  - pymol
+  - openforcefield
+  - pdbfixer
