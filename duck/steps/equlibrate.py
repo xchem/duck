@@ -88,7 +88,7 @@ def do_equlibrate(force_constant_equilibrate=1.0):
     app.PDBFile.writeFile(simulation.topology, positions, open('density_final.pdb', 'w'))
     #saving simulation stage
     checkpoint = 'equil.chk'
-    simulation.saveCheckpoint()
+    simulation.saveCheckpoint(checkpoint)
     return [checkpoint]
 
 if __name__ == "__main__":
