@@ -1,15 +1,16 @@
-name: prepare
+name: duck
 channels:
+  - abradle
   - schrodinger
-  - omnia 
+  - omnia
   - conda-forge
-  - rbetz
   - rdkit
+  - openbabel
 dependencies:
-  - python=2.7
+  - python=3.6
   - yank
   - rdkit
-  - vmd-python 
   - openbabel
   - pymol
   - pdbfixer
+  - openforcefield=swang
