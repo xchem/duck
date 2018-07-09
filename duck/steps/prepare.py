@@ -18,7 +18,7 @@ def prep_lig(mol_file,prefix):
     mol.AddHydrogens()
     obConversion.WriteFile(mol, mol2_file)
     os.system("antechamber -i " + mol2_file + " -fi mol2 -o " + out_file + " -fo mol2 -at sybyl  -c bcc")
-    return [mol2_file]
+    return [out_file]
 
 if __name__ == "__main__":
     # Set the names
