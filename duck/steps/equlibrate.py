@@ -64,7 +64,7 @@ def do_equlibrate(force_constant_equilibrate=1.0):
     simulation.reporters.append(app.DCDReporter("heating.dcd", 1000))
     # Heating the system
     print("Heating ... ")
-    simulation.step(5000) # 0.01 ns
+    simulation.step(50000) # 0.01 ns
     # Save the positions and velocities
     positions = simulation.context.getState(getPositions=True).getPositions()
     velocities = simulation.context.getState(getVelocities=True).getVelocities()
@@ -81,7 +81,7 @@ def do_equlibrate(force_constant_equilibrate=1.0):
     simulation.reporters.append(app.StateDataReporter("density.csv", 1000, time=True, potentialEnergy=True, temperature=True, density=True, remainingTime=True, speed=True, totalSteps=50000))
     # Correcting the density
     print("Correcting density")
-    simulation.step(10000) # 0.01 ns
+    simulation.step(50000) # 0.01 ns
     # Save the positions and velocities
     positions = simulation.context.getState(getPositions=True).getPositions()
     velocities = simulation.context.getState(getVelocities=True).getVelocities()
