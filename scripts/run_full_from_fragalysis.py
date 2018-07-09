@@ -15,7 +15,6 @@ cutoff = 12
 chunk_protein = "protein_out.pdb"
 chunk_prot_protein = "protein_out_prot.pdb"
 
-
 # Now it does the magic
 results  = get_from_prot_code(prot_code)
 prot_file = results[0]
@@ -30,13 +29,12 @@ results = prepare_system(mol2_file,chunk_prot_protein)
 complex = results[0]
 # Now find the interaction and save to a file
 results = find_interaction(prot_int,prot_file)
-startdist = results[1]
+startdist = results[2]
 # Now do the equlibration
 results = do_equlibrate()
 perform_md(results[0],"md_1.chk","md_1.csv","md_1.pdb")
 # Now find the interaction and save to a file
 results = find_interaction(prot_int,prot_file)
-startdist = results[1]
 run_steered_md(300,"md_1.chk","smd_1_300.csv","smd_1_300.dat","smd_1_300.pdb","smd_1_300.dcd",startdist)
 run_steered_md(325,"md_1.chk","smd_1_325.csv","smd_1_325.dat","smd_1_325.pdb","smd_1_325.dcd",startdist)
 
