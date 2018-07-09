@@ -13,8 +13,6 @@ chunk_protein = "protein_out.pdb"
 chunk_prot_protein = "protein_out.pdb"
 cutoff = 12
 
-
-
 # Now it does the magic
 results  = get_from_prot_code(prot_code)
 prot_file = results[0]
