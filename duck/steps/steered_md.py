@@ -59,7 +59,7 @@ def run_steered_md(temperature,checkpoint_in_file,csv_out_file,dat_out_file,pdb_
     pull_distance = velocity * steps_per_move
     # Reporters and duck.dat file
     simulation.reporters.append(app.StateDataReporter(csv_out_file, steps_per_move, step=True, time=True, totalEnergy=True, kineticEnergy=True, potentialEnergy=True, temperature=True, density=True, progress=True, totalSteps = steps_per_move * steps, speed=True))
-    simulation.reporters.append(app.DCDReporter(traj_out_file, 1000))
+    simulation.reporters.append(app.DCDReporter(traj_out_file, 10000))
     f=open(dat_out_file,'w')
     # Production in N steps with the update every 200 steps (2 pm)
     for i in range(steps):
