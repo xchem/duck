@@ -7,7 +7,7 @@ from duck.steps.equlibrate import do_equlibrate
 from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
 # Define these
-prot_code = "MURD-x0373"
+prot_code = "MURD-x0374"
 prot_int = "A_LYS_311_N"
 # Cutoff for the sphere
 cutoff = 12
@@ -32,9 +32,15 @@ results = find_interaction(prot_int,prot_file)
 startdist = results[2]
 # Now do the equlibration
 results = do_equlibrate()
-perform_md(results[0],"md_1.chk","md_1.csv","md_1.pdb")
-# Now find the interaction and save to a file
-results = find_interaction(prot_int,prot_file)
-run_steered_md(300,"md_1.chk","smd_1_300.csv","smd_1_300.dat","smd_1_300.pdb","smd_1_300.dcd",startdist)
-run_steered_md(325,"md_1.chk","smd_1_325.csv","smd_1_325.dat","smd_1_325.pdb","smd_1_325.dcd",startdist)
-
+# for i in range(20):
+#     if i==0:
+#         md_start = results[0]
+#     else:
+#         md_start = "md_"+str(i-1)+".chk"
+#     perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb")
+#     # Now find the interaction and save to a file
+#     run_steered_md(300,"md_"+str(i)+".chk","smd_"+str(i)+"_300.csv","smd_"+str(i)+"_300.dat",
+#                    "smd_"+str(i)+"_300.pdb","smd_"+str(i)+"_300.dcd",startdist)
+#     run_steered_md(325,"md_"+str(i)+".chk","smd_"+str(i)+"_325.csv","smd_"+str(i)+"_325.dat",
+#                    "smd_"+str(i)+"_325.pdb","smd_"+str(i)+"_325.dcd",startdist)
+#
