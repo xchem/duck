@@ -5,7 +5,7 @@ import pickle
 from duck.utils import duck_stuff
 from duck.utils import cal_ints
 
-def do_equlibrate():
+def do_equlibrate(force_constant_equilibrate=1.0):
     # Find the interations
     keyInteraction = cal_ints.find_interaction()
     # Platform definition
@@ -29,7 +29,7 @@ def do_equlibrate():
     # Get indexes of heavy atoms in chunk
     Chunk_Heavy_Atoms = duck_stuff.getHeavyAtomsInSystem(combined_pmd)
     # Apply force on all havy atoms of chunk
-    duck_stuff.applyHarmonicPositionalRestraints(system, 1.0, combined_pmd.positions, Chunk_Heavy_Atoms)
+    duck_stuff.applyHarmonicPositionalRestraints(system, force_constant, combined_pmd.positions, Chunk_Heavy_Atoms)
     # Integrator
     integrator = mm.VerletIntegrator(1*u.femtosecond)
     # Define Simulation
@@ -52,8 +52,8 @@ def do_equlibrate():
     # Define new system
     system = combined_pmd.createSystem(nonbondedMethod=app.PME, nonbondedCutoff=9*u.angstrom, constraints=app.HBonds, hydrogenMass=None)
     # Apply force on all havy atoms of chunk and apply restraint for the ligand-chunk distance
-    duck_stuff.applyHarmonicPositionalRestraints(system, 1.0, combined_pmd.positions, Chunk_Heavy_Atoms)
-    duck_stuff.applyLigandChunkRestraint(system, 1.0, 10.0, 2*u.angstrom, 3*u.angstrom, 4*u.angstrom, keyInteraction)
+    duck_stuff.applyHarmonicPositionalRestraints(system, force_constant, combined_pmd.positions, Chunk_Heavy_Atoms)
+    duck_stuff.applyLigandChunkRestraint(system, force_constant, 10.0, 2*u.angstrom, 3*u.angstrom, 4*u.angstrom, keyInteraction)
     # Intergator
     integrator = mm.LangevinIntegrator(300*u.kelvin, 4/u.picosecond, 0.002*u.picosecond)
     # Define Simulation

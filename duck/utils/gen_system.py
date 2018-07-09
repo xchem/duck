@@ -21,9 +21,12 @@ def create_system_from_molecule_rdk(forcefield, mol, verbose=False):
 	"""
 	# Create system
 	topology = utils.generateTopologyFromRDKMol(mol)
+	print("TOPOLOGY")
 	system = forcefield.createSystem(topology, [mol], verbose=verbose)
 	# Get positions
+	print("SYSTEM")
 	coordinates = mol.GetConformer().GetPositions()
+	print("COORDINATES")
 	natoms = len(coordinates)
 	positions = np.zeros([natoms,3], np.float32)
 	for index in range(natoms):

@@ -8,8 +8,8 @@ import pickle
 from duck.utils import duck_stuff,cal_ints
 
 
-def run_steered_md(temperature,checkpoint_in_file,csv_out_file,dat_out_file,pdb_out_file,traj_out_file,startdist):
-    spring_k = 50 * u.kilocalorie/(u.mole * u.angstrom * u.angstrom)
+def run_steered_md(temperature,checkpoint_in_file,csv_out_file,dat_out_file,pdb_out_file,traj_out_file,startdist,spring_constant=50,force_constant_chunk=0.1):
+    spring_k = spring_constant * u.kilocalorie/(u.mole * u.angstrom * u.angstrom)
     dist_in = startdist * u.angstrom # in angstrom
     dist_fin = (startdist+2.5) * u.angstrom # in angstrom
     steps_per_move = 200
@@ -30,7 +30,7 @@ def run_steered_md(temperature,checkpoint_in_file,csv_out_file,dat_out_file,pdb_
     # Setting System
     system = combined_pmd.createSystem(nonbondedMethod=app.PME, nonbondedCutoff=9*u.angstrom, constraints=app.HBonds, hydrogenMass=None)
     # Apply force on all havy atoms of chunk
-    duck_stuff.applyHarmonicPositionalRestraints(system, 0.1, combined_pmd.positions, Chunk_Heavy_Atoms)
+    duck_stuff.applyHarmonicPositionalRestraints(system, force_constant_chunk, combined_pmd.positions, Chunk_Heavy_Atoms)
     # Integrator
     integrator = mm.LangevinIntegrator(temperature, 4/u.picosecond, 0.002*u.picosecond)
     # Setting Simulation object and loading the checkpoint

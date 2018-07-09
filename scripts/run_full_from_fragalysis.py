@@ -12,6 +12,10 @@ prot_int = "A_LYS_311_N"
 chunk_protein = "protein_out.pdb"
 chunk_prot_protein = "protein_out.pdb"
 cutoff = 12
+
+
+
+# Now it does the magic
 results  = get_from_prot_code(prot_code)
 prot_file = results[0]
 mol_file = results[1]
@@ -31,3 +35,4 @@ results = do_equlibrate()
 perform_md(results[0],"md_1.chk","md_1.csv","md_1.pdb")
 run_steered_md(300,"md_1.chk","smd_1_300.csv","smd_1_300.dat","smd_1_300.pdb","smd_1_300.dcd",startdist)
 run_steered_md(325,"md_1.chk","smd_1_325.csv","smd_1_325.dat","smd_1_325.pdb","smd_1_325.dcd",startdist)
+
