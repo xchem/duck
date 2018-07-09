@@ -22,7 +22,7 @@ mol_file = results[1]
 # Chunk
 chunk_with_pymol(mol_file, prot_file, chunk_protein, cutoff)
 # Protontate
-do_tleap(chunk_prot_protein,chunk_protein)
+do_tleap(chunk_protein,chunk_prot_protein)
 results = prep_lig(mol_file,prot_code)
 mol2_file = results[0]
 results = prepare_system(mol2_file,chunk_prot_protein)
@@ -32,15 +32,15 @@ results = find_interaction(prot_int,prot_file)
 startdist = results[2]
 # Now do the equlibration
 results = do_equlibrate()
-# for i in range(20):
-#     if i==0:
-#         md_start = results[0]
-#     else:
-#         md_start = "md_"+str(i-1)+".chk"
-#     perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb")
-#     # Now find the interaction and save to a file
-#     run_steered_md(300,"md_"+str(i)+".chk","smd_"+str(i)+"_300.csv","smd_"+str(i)+"_300.dat",
-#                    "smd_"+str(i)+"_300.pdb","smd_"+str(i)+"_300.dcd",startdist)
-#     run_steered_md(325,"md_"+str(i)+".chk","smd_"+str(i)+"_325.csv","smd_"+str(i)+"_325.dat",
-#                    "smd_"+str(i)+"_325.pdb","smd_"+str(i)+"_325.dcd",startdist)
-#
+for i in range(20):
+    if i==0:
+        md_start = results[0]
+    else:
+        md_start = "md_"+str(i-1)+".chk"
+    perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb")
+    # Now find the interaction and save to a file
+    run_steered_md(300,"md_"+str(i)+".chk","smd_"+str(i)+"_300.csv","smd_"+str(i)+"_300.dat",
+                   "smd_"+str(i)+"_300.pdb","smd_"+str(i)+"_300.dcd",startdist)
+    run_steered_md(325,"md_"+str(i)+".chk","smd_"+str(i)+"_325.csv","smd_"+str(i)+"_325.dat",
+                   "smd_"+str(i)+"_325.pdb","smd_"+str(i)+"_325.dcd",startdist)
+
