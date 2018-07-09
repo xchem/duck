@@ -12,7 +12,7 @@ def prepare_system(ligand_file,protein_file,forcefield='amber99sb.xml'):
 	print("Preparing ligand")
 	lig_rdk=Chem.MolFromMol2File(ligand_file,sanitize=False)
 	lig_rdk.SetProp('_Name','LIG')
-	ligand_pmd=generateSMIRNOFFStructureRDK(lig_rdk)
+	ligand_pmd = generateSMIRNOFFStructureRDK(lig_rdk)
 	print("Fixing protein")
 	protein=parmed.load_file(protein_file)
 	protein.write_pdb("fixed.pdb")

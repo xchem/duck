@@ -59,6 +59,9 @@ def generateSMIRNOFFStructureRDK(molecule):
 	    mol_ff = forcefield_rdk.ForceField(ffxml)
 	#TODO : integrate charges
 	charged_molecule = molecule
+	print("CREATE")
 	mol_top, mol_sys, mol_pos = create_system_from_molecule_rdk(mol_ff, charged_molecule)
+	print("PARM")
 	molecule_structure = parmed.openmm.load_topology(mol_top, mol_sys, xyz=mol_pos)
+	print("DONE")
 	return molecule_structure
