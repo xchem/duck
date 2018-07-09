@@ -8,7 +8,7 @@ import sys
 import pickle
 from duck.utils.gen_system import generateSMIRNOFFStructureRDK
 
-def prepare_system(ligand_file,protein_file,forcefield='amber99sb.xml'):
+def prepare_system(ligand_file,protein_file,forcefield_str='amber99sb.xml'):
 	print("Preparing ligand")
 	lig_rdk=Chem.MolFromMol2File(ligand_file,sanitize=False)
 	lig_rdk.SetProp('_Name','LIG')
@@ -19,7 +19,7 @@ def prepare_system(ligand_file,protein_file,forcefield='amber99sb.xml'):
 	print("loading system")
 	protein=parmed.load_file("fixed.pdb")
 	protein = protein["!(:HOH,NA,CL)"] #remove ions and water
-	forcefield = app.ForceField(forcefield)
+	forcefield = app.ForceField(forcefield_str)
 	protein_system = forcefield.createSystem(protein.topology)
 	protein_pmd = parmed.openmm.load_topology(protein.topology, protein_system, protein.positions)
 	protein_pmd.save("protein_prepared.pdb",overwrite=True)
@@ -37,7 +37,7 @@ def prepare_system(ligand_file,protein_file,forcefield='amber99sb.xml'):
 	print("Parametrizing ions")
 	complex = parmed.load_file('./complex_solvated.pdb')
 	ions = complex["(:NA,CL)"]
-	forcefield = app.ForceField(forcefield)
+	forcefield = app.ForceField(forcefield_str)
 	ions_system = forcefield.createSystem(ions.topology)
 	ions_pmd = parmed.openmm.load_topology(ions.topology, ions_system, ions.positions)
 	print("Parametrizing ions done")
