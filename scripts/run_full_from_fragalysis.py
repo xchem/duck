@@ -23,7 +23,6 @@ chunk_with_pymol(mol_file, prot_file, chunk_protein, cutoff)
 do_tleap(chunk_prot_protein,chunk_protein)
 results = prep_lig(mol_file,prot_code)
 mol2_file = results[0]
-print(mol2_file,chunk_prot_protein)
 results = prepare_system(mol2_file,chunk_prot_protein)
 complex = results[0]
 # Now find the interaction and save to a file

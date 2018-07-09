@@ -45,7 +45,7 @@ def prepare_system(ligand_file,protein_file,forcefield_str='amber99sb.xml'):
 	print("Parametrizing solvent")
 	solvent = complex["(:HOH)"]
 	num_solvent = len(solvent.residues)
-	solvent_pmd = parmed.load_file("./water/water.prmtop")
+	solvent_pmd = parmed.load_file("./parameters/waters/water.prmtop")
 	solvent_pmd *= num_solvent
 	solvent_pmd.positions = solvent.positions
 	print("Parametrizing solvent done")
