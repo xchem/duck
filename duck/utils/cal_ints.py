@@ -50,9 +50,10 @@ def find_interaction(res_atom=None,prot_file=None):
   index_one = distance_atom_1[0][0]
   index_two = distance_atom_2[0][0]
   out_f = open(output_file,"w")
-  out_f.write(json.dumps([index_one,index_two]))
+  out_res = [index_one,index_two,math.sqrt(distance_atom_2[0][1])]
+  out_f.write(json.dumps(out_res))
   out_f.close()
-  return [output_file,math.sqrt(distance_atom_2[0][1])]
+  return [index_one,index_two,math.sqrt(distance_atom_2[0][1])]
 
 if __name__ =="__main__":
   # Define the input

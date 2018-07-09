@@ -8,7 +8,7 @@ from duck.utils import duck_stuff
 from duck.utils import cal_ints
 
 
-def perform_md(checkpoint_in_file,checkpoint_out_file,csv_out_file,pdb_out_file, force_constant_ligand=1.0, md_len=1.0,force_constant_chunk=0.1):
+def perform_md(checkpoint_in_file,checkpoint_out_file,csv_out_file,pdb_out_file, force_constant_ligand=1.0, md_len=1.0, force_constant_chunk=0.1):
 	print("loading pickle")
 	pickle_in=open('complex_system.pickle', 'rb')
 	combined_pmd = pickle.load(pickle_in)[0]
@@ -35,7 +35,7 @@ def perform_md(checkpoint_in_file,checkpoint_out_file,csv_out_file,pdb_out_file,
 	simulation = app.Simulation(combined_pmd.topology, system, integrator, platform, platformProperties)
 	simulation.loadCheckpoint(checkpoint_in_file)
 	# Simulation reporters
-	simulation.reporters.append(app.StateDataReporter(csv_out_file, 2000, step=True, time=True, totalEnergy=True, kineticEnergy=True, potentialEnergy=True, temperature=True, density=True, progress=True, totalSteps=250000, speed=True))
+	simulation.reporters.append(app.StateDataReporter(csv_out_file, 2000, step=True, time=True, totalEnergy=True, kineticEnergy=True, potentialEnergy=True, temperature=True, density=True, progress=True, totalSteps=sim_steps, speed=True))
 	simulation.reporters.append(app.DCDReporter("md.dcd", 1000))
 	# Production
 	simulation.step(sim_steps)
