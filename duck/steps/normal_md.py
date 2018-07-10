@@ -1,7 +1,6 @@
 import simtk.openmm as mm
 import simtk.openmm.app as app
 import simtk.unit as u
-#!#from mdtraj.reporters import HDF5Reporter
 import sys
 import pickle
 from duck.utils import duck_stuff

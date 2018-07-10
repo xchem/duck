@@ -17,7 +17,7 @@ for i in range(20):
         md_start = "equil.chk"
     else:
         md_start = "md_"+str(i-1)+".chk"
-    perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb")
+    perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb",md_len=0.5)
     # Now find the interaction and save to a file
     run_steered_md(300,"md_"+str(i)+".chk","smd_"+str(i)+"_300.csv","smd_"+str(i)+"_300.dat",
                    "smd_"+str(i)+"_300.pdb","smd_"+str(i)+"_300.dcd",startdist)

@@ -2,7 +2,7 @@ import numpy as np
 import openforcefield.utils as utils
 from openforcefield.typing.engines.smirnoff import forcefield_rdk
 from simtk import unit
-import parmed,os,sys
+import parmed
 
 def create_system_from_molecule_rdk(forcefield, mol, verbose=False):
 	"""
@@ -34,21 +34,6 @@ def create_system_from_molecule_rdk(forcefield, mol, verbose=False):
 	positions = unit.Quantity(positions, unit.angstroms)
 	return topology, system, positions
 
-
-def generateSMIRNOFFSystemRDK(molecule):
-	"""
-	Given an RDKit molecule, create an OpenMM System and use to
-	generate a ParmEd structure using the SMIRNOFF forcefield parameters.
-	"""
-	ff = './parameters/smirnoff99Frosst.offxml'
-	with open(ff) as ffxml:
-	    mol_ff = forcefield_rdk.ForceField(ffxml)
-	#TODO : integrate charges
-	charged_molecule = molecule
-	mol_top, mol_sys, mol_pos = create_system_from_molecule_rdk(mol_ff, charged_molecule)
-	return mol_top, mol_sys, mol_pos
-
-
 def generateSMIRNOFFStructureRDK(molecule):
 	"""
 	Given an RDKit molecule, create an OpenMM System and use to
@@ -58,6 +43,8 @@ def generateSMIRNOFFStructureRDK(molecule):
 	with open(ff) as ffxml:
 	    mol_ff = forcefield_rdk.ForceField(ffxml)
 	#TODO : integrate charges
+	# Can run this - should be already done
+	# os.system("antechamber -i " + mol2_file + " -fi mol2 -o " + out_file + " -fo mol2 -at sybyl  -c bcc")
 	charged_molecule = molecule
 	mol_top, mol_sys, mol_pos = create_system_from_molecule_rdk(mol_ff, charged_molecule)
 	molecule_structure = parmed.openmm.load_topology(mol_top, mol_sys, xyz=mol_pos)
