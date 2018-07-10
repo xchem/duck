@@ -57,7 +57,8 @@ def main():
     num_smd_cycles = out_data["num_smd_cycles"]
     gpu_id = str(out_data["gpu_id"])
     # Now get the data from Fragalysis
-    if not out_data["apo_pdb_file"] or not out_data["mol_file"]:
+
+    if "apo_pdb_file" not in out_data or "mol_file" not in out_data:
         results = get_from_prot_code(prot_code)
         prot_file = results[0]
         mol_file = results[1]
