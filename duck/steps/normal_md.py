@@ -36,7 +36,7 @@ def perform_md(checkpoint_in_file,checkpoint_out_file,csv_out_file,pdb_out_file,
 	simulation.loadCheckpoint(checkpoint_in_file)
 	# Simulation reporters
 	simulation.reporters.append(app.StateDataReporter(csv_out_file, 2000, step=True, time=True, totalEnergy=True, kineticEnergy=True, potentialEnergy=True, temperature=True, density=True, progress=True, totalSteps=sim_steps, speed=True))
-	simulation.reporters.append(app.DCDReporter("md.dcd", 1000))
+	simulation.reporters.append(app.DCDReporter("md.dcd", 100000))
 	# Production
 	simulation.step(sim_steps)
 	# Save state in checkpoint file and save coordinates in PDB file
