@@ -33,7 +33,7 @@ def run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, g
     # Now do the MD
     for i in range(num_smd_cycles):
         if i==0:
-            md_start = results[0]
+            md_start = "equil.chk"
         else:
             md_start = "md_"+str(i-1)+".chk"
         perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb",md_len=0.5,gpu_id=gpu_id)
