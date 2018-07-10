@@ -73,13 +73,7 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
-    package_data={"duck": ["parameters/smirnoff99Frosst.offxml",
-                           "parameters/tip3p.offxml"
-                           'parameters/water/do.leap',
-                           'parameters/leap.log',
-                           'parameters/water.inpcrd',
-                           'parameters/water.pdb',
-                           'parameters/water.prmtop',]},
+    package_data={"duck": ["parameters/*.offxml","parameters/waters/*","parameters/tleap/*"]},
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages. See:
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa

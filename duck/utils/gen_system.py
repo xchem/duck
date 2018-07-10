@@ -2,7 +2,7 @@ import numpy as np
 import openforcefield.utils as utils
 from openforcefield.typing.engines.smirnoff import forcefield_rdk
 from simtk import unit
-import parmed
+import parmed, pkg_resources
 
 def create_system_from_molecule_rdk(forcefield, mol, verbose=False):
 	"""
@@ -39,7 +39,7 @@ def generateSMIRNOFFStructureRDK(molecule):
 	Given an RDKit molecule, create an OpenMM System and use to
 	generate a ParmEd structure using the SMIRNOFF forcefield parameters.
 	"""
-	ff = './parameters/smirnoff99Frosst.offxml'
+	ff = pkg_resources.resource_filename('duck', "parameters/smirnoff99Frosst.offxml")
 	with open(ff) as ffxml:
 	    mol_ff = forcefield_rdk.ForceField(ffxml)
 	#TODO : integrate charges

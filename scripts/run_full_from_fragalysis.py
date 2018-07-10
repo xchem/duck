@@ -15,7 +15,6 @@ md_len = 0.5
 init_velocity = 0.00001
 num_smd_cycles = 20
 
-
 # A couple of file names
 chunk_protein = "protein_out.pdb"
 chunk_prot_protein = "protein_out_prot.pdb"

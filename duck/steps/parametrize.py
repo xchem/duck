@@ -1,7 +1,7 @@
 from simtk.openmm import app
 from rdkit import Chem
 from simtk import unit
-import parmed
+import parmed,pkg_resources
 from simtk import openmm
 from pdbfixer import PDBFixer # for solvating
 import sys
@@ -45,7 +45,8 @@ def prepare_system(ligand_file,protein_file,forcefield_str='amber99sb.xml'):
 	print("Parametrizing solvent")
 	solvent = complex["(:HOH)"]
 	num_solvent = len(solvent.residues)
-	solvent_pmd = parmed.load_file("./parameters/waters/water.prmtop")
+	prm_top_water_path = pkg_resources.resource_filename('duck', "parameters/waters/water.prmtop")
+	solvent_pmd = parmed.load_file(prm_top_water_path)
 	solvent_pmd *= num_solvent
 	solvent_pmd.positions = solvent.positions
 	print("Parametrizing solvent done")

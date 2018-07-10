@@ -10,6 +10,7 @@ prot_int = "A_LYS_311_N"
 results  = get_from_prot_code(prot_code)
 prot_file = results[0]
 # Now find the interaction and save to a file
+
 results = find_interaction(prot_int,prot_file)
 startdist = results[2]
 for i in range(20):

@@ -1,9 +1,10 @@
 from pymol import cmd, stored
-import os
+import os,pkg_resources
 
 
 def return_tleap(out_save, prot_protein_chunk):
-    return """source /home/ubuntu/anaconda3/envs/duck/dat/leap/cmd/leaprc.ff14SB.redq
+    param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.ff14SB.redq")
+    return """source """+param_f_path+"""
 mol = loadpdb """ + out_save + """
 savepdb mol """ + prot_protein_chunk + """
 quit"""
@@ -14,7 +15,7 @@ def do_tleap(out_save, prot_protein_chunk):
     out_f = open("run.tleap","w")
     out_f.write(return_tleap(out_save, prot_protein_chunk))
     out_f.close()
-    os.system("/home/ubuntu/anaconda3/envs/duck/bin/tleap -f run.tleap")
+    os.system("tleap -f run.tleap")
 
 
 def chunk_with_pymol(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=12):
