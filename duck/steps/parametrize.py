@@ -16,9 +16,7 @@ def prepare_system(ligand_file,protein_file,forcefield_str='amber99sb.xml'):
 	print("Fixing protein")
 	protein=parmed.load_file(protein_file)
 	protein.write_pdb("fixed.pdb")
-	pdb_fixer =  PDBFixer("fixed.pdb")
-	pdb_fixer.addMissingAtoms()
-	app.PDBFile.writeFile(pdb_fixer.topology, pdb_fixer.positions, open('fixed_again.pdb', 'w'))
+	os.system("pdbfixer fixed.pdb --add-atoms=all --output=fixed_again.pdb")
 	print("loading system")
 	protein=parmed.load_file("fixed_again.pdb")
 	protein = protein["!(:HOH,NA,CL)"] #remove ions and water
