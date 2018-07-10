@@ -51,7 +51,7 @@ def main():
     cutoff = out_data["cutoff"]
     md_len = out_data["md_len"]
     init_velocity = out_data["init_velocity"]
-    num_smd_cycles = out_data["smd_cycles"]
+    num_smd_cycles = out_data["num_smd_cycles"]
     run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles)
 
 if __name__ == "__main__":
