@@ -13,7 +13,8 @@ def check_same(atom,chain,res_name,res_number,atom_name):
   return False
 
 def is_lig(atom):
-  if atom.residue.name=="LIG" and atom.atomic_number in [7,8]:
+  # Non-hydrogen
+  if atom.residue.name=="LIG" and atom.atomic_number > 1:
     return True
 
 def find_interaction(res_atom=None,prot_file=None):

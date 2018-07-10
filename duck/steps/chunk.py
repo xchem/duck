@@ -1,6 +1,6 @@
 from pymol import cmd, stored
 import os,pkg_resources
-
+import parmed
 
 def return_tleap(out_save, prot_protein_chunk):
     param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.ff14SB.redq")
@@ -45,6 +45,10 @@ def chunk_with_pymol(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     # # here's an example of adding a whole residue from the library
     # edit cys////N
     # editor.attach_amino_acid("pk1","ace")
+
+def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=10.0):
+    # Load up the topology
+    ":"+LIG_RES_NUM+" >:10.0"
 
 if __name__ == "__main__":
     chunk_with_pymol()
