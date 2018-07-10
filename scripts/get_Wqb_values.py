@@ -38,7 +38,6 @@ def get_Wqb_value(file_duck_dat):
         else:
             if index_local2 == 100:
                 Wqb_min_index = index_global
-                break
     Wqb_min = Work[Wqb_min_index]
     sub_max_data = data[Wqb_min_index:]
     sub_max_Work = sub_max_data[:,3]
@@ -65,7 +64,13 @@ def get_Wqb_value_all(input_dir):
     Wqb = min(Wqb_values)
     return(Wqb)
 
-if __name__ == '__main__':
-    input_dir = sys.argv[1]
+def main():
+    if len(sys.argv) > 1:
+        input_dir = sys.argv[1]
+    else:
+        input_dir = os.getcwd()
     print(get_Wqb_value_all(input_dir))
+
+if __name__ == '__main__':
+    main()
 
