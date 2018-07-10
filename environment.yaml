@@ -1,7 +1,6 @@
 name: duck
 channels:
   - abradle
-  - schrodinger
   - omnia
   - conda-forge
   - rdkit
@@ -9,7 +8,6 @@ dependencies:
   - python=3.6
   - yank
   - rdkit=2018.03.2
-  - pymol
   - pdbfixer
   - openforcefield=swang
   - pip:

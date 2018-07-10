@@ -2,7 +2,7 @@ from duck.steps.parametrize import prepare_system
 from duck.utils.get_from_fragalysis import get_from_prot_code
 from duck.utils.cal_ints import find_interaction
 from duck.steps.prepare import prep_lig
-from duck.steps.chunk import chunk_with_pymol,do_tleap
+from duck.steps.chunk import chunk_with_amber,do_tleap
 from duck.steps.equlibrate import do_equlibrate
 from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
@@ -15,7 +15,7 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
         chunk_prot_protein = "protein_out_prot.pdb"
         # Now it does the magic
         # Chunk
-        chunk_with_pymol(mol_file, prot_file, chunk_protein, cutoff)
+        chunk_with_amber(mol_file, prot_file, chunk_protein, cutoff)
         # Protontate
         do_tleap(chunk_protein,chunk_prot_protein)
         results = prep_lig(mol_file,prot_code)
