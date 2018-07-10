@@ -4,7 +4,7 @@ from simtk import unit
 import parmed,pkg_resources
 from simtk import openmm
 from pdbfixer import PDBFixer # for solvating
-import sys
+import sys,os
 import pickle
 from duck.utils.gen_system import generateSMIRNOFFStructureRDK
 
