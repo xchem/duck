@@ -8,7 +8,7 @@ from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
 import yaml, sys
 
-def run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles):
+def run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id):
     # A couple of file names
     chunk_protein = "protein_out.pdb"
     chunk_prot_protein = "protein_out_prot.pdb"
@@ -28,18 +28,18 @@ def run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles):
     results = find_interaction(prot_int,prot_file)
     startdist = results[2]
     # Now do the equlibration
-    results = do_equlibrate()
+    results = do_equlibrate(gpu_id=gpu_id)
     for i in range(num_smd_cycles):
         if i==0:
             md_start = results[0]
         else:
             md_start = "md_"+str(i-1)+".chk"
-        perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb",md_len=0.5)
+        perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb",md_len=0.5,gpu_id=gpu_id)
         # Now find the interaction and save to a file
         run_steered_md(300,"md_"+str(i)+".chk","smd_"+str(i)+"_300.csv","smd_"+str(i)+"_300.dat",
-                       "smd_"+str(i)+"_300.pdb","smd_"+str(i)+"_300.dcd",startdist,init_velocity=init_velocity)
+                       "smd_"+str(i)+"_300.pdb","smd_"+str(i)+"_300.dcd",startdist,init_velocity=init_velocity,gpu_id=gpu_id)
         run_steered_md(325,"md_"+str(i)+".chk","smd_"+str(i)+"_325.csv","smd_"+str(i)+"_325.dat",
-                       "smd_"+str(i)+"_325.pdb","smd_"+str(i)+"_325.dcd",startdist,init_velocity=init_velocity)
+                       "smd_"+str(i)+"_325.pdb","smd_"+str(i)+"_325.dcd",startdist,init_velocity=init_velocity,gpu_id=gpu_id)
 
 
 def main():
@@ -52,7 +52,8 @@ def main():
     md_len = out_data["md_len"]
     init_velocity = out_data["init_velocity"]
     num_smd_cycles = out_data["num_smd_cycles"]
-    run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles)
+    gpu_id = out_data["gpu_id"]
+    run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id)
 
 if __name__ == "__main__":
     main()

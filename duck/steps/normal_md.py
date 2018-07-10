@@ -7,7 +7,7 @@ from duck.utils import duck_stuff
 from duck.utils import cal_ints
 
 
-def perform_md(checkpoint_in_file,checkpoint_out_file,csv_out_file,pdb_out_file, force_constant_ligand=1.0, md_len=1.0, force_constant_chunk=0.1):
+def perform_md(checkpoint_in_file,checkpoint_out_file,csv_out_file,pdb_out_file, force_constant_ligand=1.0, md_len=1.0, force_constant_chunk=0.1, gpu_id=0):
 	if os.path.isfile(checkpoint_out_file):
 		return
 	print("loading pickle")
@@ -23,6 +23,7 @@ def perform_md(checkpoint_in_file,checkpoint_out_file,csv_out_file,pdb_out_file,
 	platform = mm.Platform_getPlatformByName("OpenCL")
 	platformProperties = {}
 	platformProperties['OpenCLPrecision'] = 'mixed'
+	platformProperties["OpenCLDeviceIndex"] = gpu_id
 	# Get indexes of heavy atoms in chunk
 	Chunk_Heavy_Atoms = duck_stuff.getHeavyAtomsInSystem(combined_pmd)
 	# Setting System
