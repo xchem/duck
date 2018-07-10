@@ -16,9 +16,9 @@ def prepare_system(ligand_file,protein_file,forcefield_str='amber99sb.xml'):
 	print("Fixing protein")
 	protein=parmed.load_file(protein_file)
 	protein.write_pdb("fixed.pdb")
-	os.system("pdbfixer fixed.pdb --add-atoms=all --output=fixed_again.pdb")
+	os.system("pdbfixer fixed.pdb --add-atoms=all --replace-nonstandard --output=fixed_again.pdb")
 	print("loading system")
-	protein=parmed.load_file("fixed_again.pdb")
+	protein = parmed.load_file("fixed_again.pdb")
 	protein = protein["!(:HOH,NA,CL)"] #remove ions and water
 	forcefield = app.ForceField(forcefield_str)
 	protein_system = forcefield.createSystem(protein.topology)
