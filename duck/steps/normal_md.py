@@ -1,13 +1,15 @@
 import simtk.openmm as mm
 import simtk.openmm.app as app
 import simtk.unit as u
-import sys
+import sys,os
 import pickle
 from duck.utils import duck_stuff
 from duck.utils import cal_ints
 
 
 def perform_md(checkpoint_in_file,checkpoint_out_file,csv_out_file,pdb_out_file, force_constant_ligand=1.0, md_len=1.0, force_constant_chunk=0.1):
+	if os.path.isfile(checkpoint_out_file):
+		return
 	print("loading pickle")
 	pickle_in=open('complex_system.pickle', 'rb')
 	combined_pmd = pickle.load(pickle_in)[0]
