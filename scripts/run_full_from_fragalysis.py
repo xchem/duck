@@ -6,14 +6,16 @@ from duck.steps.chunk import chunk_with_pymol,do_tleap
 from duck.steps.equlibrate import do_equlibrate
 from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
+import yaml, sys
 # Define these in a YAML
-prot_code = "MURD-x0374"
-prot_int = "A_LYS_311_N"
+out_data = yaml.load(open(sys.argv[1]))
+prot_code = out_data["prot_code"]
+prot_int = out_data["prot_int"]
 # Cutoff for the sphere
-cutoff = 12
-md_len = 0.5
-init_velocity = 0.00001
-num_smd_cycles = 20
+cutoff = out_data["cutoff"]
+md_len = out_data["md_len"]
+init_velocity = out_data["init_velocity"]
+num_smd_cycles = out_data["smd_cycles"]
 
 # A couple of file names
 chunk_protein = "protein_out.pdb"
