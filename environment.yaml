@@ -5,12 +5,10 @@ channels:
   - omnia
   - conda-forge
   - rdkit
-  - openbabel
 dependencies:
   - python=3.6
   - yank
   - rdkit=2018.03.2
-  - openbabel
   - pymol
   - pdbfixer
   - openforcefield=swang
