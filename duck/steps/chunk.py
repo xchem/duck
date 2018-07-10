@@ -18,7 +18,7 @@ def do_tleap(out_save, prot_protein_chunk):
     os.system("tleap -f run.tleap")
 
 
-def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=8.0):
+def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=7.0):
     # Load up the topology
     protein = parmed.load_file(prot_file)["!(:HOH,NA,CL)"]
     mol = Chem.MolFromMolFile(mol_file)
@@ -49,7 +49,7 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     for res in residues:
         atom_idx.extend([x.idx for x in res.atoms])
     merged[atom_idx].write_pdb(out_save)
-    return out_save
+    return [out_save]
 
 
 if __name__ == "__main__":
