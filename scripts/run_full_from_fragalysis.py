@@ -52,7 +52,7 @@ def main():
     md_len = out_data["md_len"]
     init_velocity = out_data["init_velocity"]
     num_smd_cycles = out_data["num_smd_cycles"]
-    gpu_id = out_data["gpu_id"]
+    gpu_id = str(out_data["gpu_id"])
     run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id)
 
 if __name__ == "__main__":
