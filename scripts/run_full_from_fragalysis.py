@@ -9,14 +9,14 @@ from duck.steps.steered_md import run_steered_md
 import yaml, sys, os
 
 def run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id):
+    results = get_from_prot_code(prot_code)
+    prot_file = results[0]
+    mol_file = results[1]
     if not os.path.isfile("equil.chk"):
         # A couple of file names
         chunk_protein = "protein_out.pdb"
         chunk_prot_protein = "protein_out_prot.pdb"
         # Now it does the magic
-        results  = get_from_prot_code(prot_code)
-        prot_file = results[0]
-        mol_file = results[1]
         # Chunk
         chunk_with_pymol(mol_file, prot_file, chunk_protein, cutoff)
         # Protontate
@@ -30,6 +30,10 @@ def run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, g
         startdist = results[2]
         # Now do the equlibration
         results = do_equlibrate(gpu_id=gpu_id)
+    else:
+        # Now find the interaction and save to a file
+        results = find_interaction(prot_int,prot_file)
+        startdist = results[2]
     # Now do the MD
     for i in range(num_smd_cycles):
         if i==0:
