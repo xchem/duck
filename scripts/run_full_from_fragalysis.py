@@ -8,10 +8,7 @@ from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
 import yaml, sys, os
 
-def run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id):
-    results = get_from_prot_code(prot_code)
-    prot_file = results[0]
-    mol_file = results[1]
+def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len):
     if not os.path.isfile("equil.chk"):
         # A couple of file names
         chunk_protein = "protein_out.pdb"
@@ -40,7 +37,7 @@ def run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, g
             md_start = "equil.chk"
         else:
             md_start = "md_"+str(i-1)+".chk"
-        perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb",md_len=0.5,gpu_id=gpu_id)
+        perform_md(md_start,"md_"+str(i)+".chk","md_"+str(i)+".csv","md_"+str(i)+".pdb",md_len=md_len,gpu_id=gpu_id)
         # Now find the interaction and save to a file
         run_steered_md(300,"md_"+str(i)+".chk","smd_"+str(i)+"_300.csv","smd_"+str(i)+"_300.dat",
                        "smd_"+str(i)+"_300.pdb","smd_"+str(i)+"_300.dcd",startdist,init_velocity=init_velocity,gpu_id=gpu_id)
@@ -59,7 +56,15 @@ def main():
     init_velocity = out_data["init_velocity"]
     num_smd_cycles = out_data["num_smd_cycles"]
     gpu_id = str(out_data["gpu_id"])
-    run_simulation(prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id)
+    # Now get the data from Fragalysis
+    if not out_data["apo_pdb_file"] or not out_data["mol_file"]:
+        results = get_from_prot_code(prot_code)
+        prot_file = results[0]
+        mol_file = results[1]
+    else:
+        prot_file = out_data["apo_pdb_file"]
+        mol_file = out_data["mol_file"]
+    run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len)
 
 if __name__ == "__main__":
     main()
