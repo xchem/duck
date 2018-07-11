@@ -4,13 +4,10 @@ import parmed
 
 def return_tleap(prot_protein_chunk, out_save):
     param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.ff14SB.redq")
-    return """mol = loadpdb """ + prot_protein_chunk + """
+    return """source """+param_f_path+"""
+mol = loadpdb """ + prot_protein_chunk + """
 savepdb mol """ + out_save + """
 quit"""
-#     return """source """+param_f_path+"""
-# mol = loadpdb """ + prot_protein_chunk + """
-# savepdb mol """ + out_save + """
-# quit"""
 
 
 def do_tleap(prot_protein_chunk, out_save):
@@ -20,13 +17,12 @@ def do_tleap(prot_protein_chunk, out_save):
     out_f.close()
     os.system("tleap -f run.tleap")
 
-def add_cap(x,atom_set):
+def add_cap(x, atom_set):
     # Add the cap
     atom_set.add(x.idx)
-    # Add the acetyl cap in full
-    if x.name == "C":
-        for y in x.bond_partners:
-            atom_set.add(y.idx)
+    # Add the capping atoms
+    for y in x.bond_partners:
+        atom_set.add(y.idx)
     return atom_set
 
 def find_neighbour_residues(residues):
@@ -56,15 +52,24 @@ def convert_to_ace_nme(subset):
         if len(residue)==3:
             if set([x.name for x in residue.atoms]) == set(["CA","C","O"]):
                 residue.name="ACE"
-        elif len(residue)==1:
-            if [x.name for x in residue.atoms] == ["N"]:
+                for atom in residue.atoms:
+                    if atom.name == "CA":
+                        atom.name = "CH3"
+        elif len(residue)==2:
+            if set([x.name for x in residue.atoms]) == set(["CA","N"]):
                 residue.name="NME"
+                print("HERE")
+                for atom in residue.atoms:
+                    if atom.name == "CA":
+                        atom.name = "CH3"
     return subset
 
 
 def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=7.0):
     # Load up the topology
-    protein = parmed.load_file(prot_file)["!(:HOH,NA,CL)"]
+    protein = parmed.load_file(prot_file)["!(:HOH,NA,CL,SO4,EDO)"]
+    protein.write_pdb("no_altlocs.pdb", altlocs="first")
+    protein = parmed.load_file("no_altlocs.pdb")
     mol = Chem.MolFromMolFile(mol_file)
     pdb_mol_file = mol_file.replace(".mol",".pdb")
     Chem.MolToPDBFile(mol,pdb_mol_file)
@@ -83,6 +88,7 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     subset = merged[atom_idx]
     subset = convert_to_ace_nme(subset)
     subset.write_pdb(out_save)
+    add_ter_records(out_save,out_save)
     return [out_save]
 
 def prot_with_pdb_fixer(chunk_protein, chunk_prot_protein):
@@ -97,8 +103,6 @@ def add_ter_records(input_file,output_file):
         if "NME" in line:
             output_f.write("TER\n")
     return [output_file]
-
-
 
 
 if __name__ == "__main__":

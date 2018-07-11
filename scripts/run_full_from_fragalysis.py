@@ -2,7 +2,7 @@ from duck.steps.parametrize import prepare_system
 from duck.utils.get_from_fragalysis import get_from_prot_code
 from duck.utils.cal_ints import find_interaction
 from duck.steps.prepare import prep_lig
-from duck.steps.chunk import chunk_with_amber, add_ter_records,do_tleap
+from duck.steps.chunk import chunk_with_amber,do_tleap
 from duck.steps.equlibrate import do_equlibrate
 from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
@@ -12,16 +12,15 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
     if not os.path.isfile("equil.chk"):
         # A couple of file name
         chunk_protein = "protein_out.pdb"
-        chunk_protein_ter = "protein_out_ter.pdb"
-        chunk_prot_protein = "protein_out_prot.pdb"
+        chunk_protein_prot = "protein_out_prot.pdb"
         # Now it does the magic
         # Chunk
         chunk_with_amber(mol_file, prot_file, chunk_protein, cutoff)
         # Protontate
-        do_tleap(chunk_protein, chunk_prot_protein)
+        do_tleap(chunk_protein,chunk_protein_prot)
         results = prep_lig(mol_file,prot_code)
         mol2_file = results[0]
-        results = prepare_system(mol2_file,chunk_prot_protein)
+        results = prepare_system(mol2_file,chunk_protein_prot)
         complex = results[0]
         # Now find the interaction and save to a file
         results = find_interaction(prot_int,prot_file)
