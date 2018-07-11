@@ -17,7 +17,7 @@ def prepare_system(ligand_file, protein_file, forcefield_str='amber99sb.xml'):
     protein = parmed.load_file(protein_file)
     protein.write_pdb("fixed.pdb")
     print("loading system")
-    protein = protein["!(:HOH,NA,CL)"]  # remove ions and water
+    protein = parmed.load_file("fixed.pdb")["!(:HOH,NA,CL)"]  # remove ions and water
     forcefield = app.ForceField(forcefield_str)
     protein_system = forcefield.createSystem(protein.topology)
     protein_pmd = parmed.openmm.load_topology(protein.topology, protein_system, protein.positions)
