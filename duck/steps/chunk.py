@@ -3,7 +3,7 @@ from rdkit import Chem
 import parmed
 
 def return_tleap(prot_protein_chunk, out_save):
-    param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.protein.ff14SB")
+    param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.ff14SB.redq")
     return """mol = loadpdb """ + prot_protein_chunk + """
 savepdb mol """ + out_save + """
 quit"""
