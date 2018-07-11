@@ -90,7 +90,7 @@ def add_ter_records(input_file,output_file):
     lines = open(input_file).readlines()
     output_f = open(output_file,"w")
     for line in lines:
-        output_f.write(line+"\n")
+        output_f.write(line)
         if "NME" in line:
             output_f.write("TER\n")
     return [output_file]
