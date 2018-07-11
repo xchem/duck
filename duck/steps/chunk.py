@@ -82,6 +82,9 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     subset.write_pdb(out_save)
     return [out_save]
 
+def prot_with_pdb_fixer(chunk_protein, chunk_prot_protein):
+    os.system("pdbfixer " + chunk_protein + " --replace-nonstandard --output=" + chunk_prot_protein)
+    return [chunk_prot_protein]
 
 if __name__ == "__main__":
     chunk_with_amber()
