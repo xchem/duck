@@ -13,7 +13,7 @@ quit"""
 def do_tleap(out_save, prot_protein_chunk):
     # Now do tleap
     out_f = open("run.tleap","w")
-    out_f.write(return_tleap(out_save, prot_protein_chunk))
+    out_f.write(return_tleap(prot_protein_chunk, out_save))
     out_f.close()
     os.system("tleap -f run.tleap")
 
