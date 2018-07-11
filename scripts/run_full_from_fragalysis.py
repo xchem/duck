@@ -17,7 +17,8 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
         # Chunk
         chunk_with_amber(mol_file, prot_file, chunk_protein, cutoff)
         # Protontate
-        do_tleap(chunk_protein,chunk_prot_protein)
+        final_output = "chunk_fixed.pdb"
+        os.system("pdbfixer " + chunk_protein + " --replace-nonstandard --output=" + chunk_prot_protein)
         results = prep_lig(mol_file,prot_code)
         mol2_file = results[0]
         results = prepare_system(mol2_file,chunk_prot_protein)
