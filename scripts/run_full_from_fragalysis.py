@@ -2,7 +2,7 @@ from duck.steps.parametrize import prepare_system
 from duck.utils.get_from_fragalysis import get_from_prot_code
 from duck.utils.cal_ints import find_interaction
 from duck.steps.prepare import prep_lig
-from duck.steps.chunk import chunk_with_amber, prot_with_pdb_fixer,do_tleap
+from duck.steps.chunk import chunk_with_amber, add_ter_records,do_tleap
 from duck.steps.equlibrate import do_equlibrate
 from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
@@ -10,15 +10,16 @@ import yaml, sys, os
 
 def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len):
     if not os.path.isfile("equil.chk"):
-        # A couple of file names
+        # A couple of file name
         chunk_protein = "protein_out.pdb"
+        chunk_protein_ter = "protein_out_ter.pdb"
         chunk_prot_protein = "protein_out_prot.pdb"
         # Now it does the magic
         # Chunk
         chunk_with_amber(mol_file, prot_file, chunk_protein, cutoff)
         # Protontate
-        final_output = "chunk_fixed.pdb"
-        do_tleap(chunk_protein, chunk_prot_protein)
+        add_ter_records(chunk_protein, chunk_protein_ter)
+        do_tleap(chunk_protein_ter, chunk_prot_protein)
         results = prep_lig(mol_file,prot_code)
         mol2_file = results[0]
         results = prepare_system(mol2_file,chunk_prot_protein)

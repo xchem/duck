@@ -86,6 +86,18 @@ def prot_with_pdb_fixer(chunk_protein, chunk_prot_protein):
     os.system("pdbfixer " + chunk_protein + " --replace-nonstandard --output=" + chunk_prot_protein)
     return [chunk_prot_protein]
 
+def add_ter_records(input_file,output_file):
+    lines = open(input_file).readlines()
+    output_f = open(output_file,"w")
+    for line in lines:
+        output_f.write(line+"\n")
+        if "NME" in line:
+            output_f.write("TER\n")
+    return [output_file]
+
+
+
+
 if __name__ == "__main__":
     chunk_with_amber()
     do_tleap()
