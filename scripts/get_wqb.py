@@ -11,7 +11,7 @@ def get_Wqb_value(file_duck_dat):
     f.close()
     data = np.array(data[1:])
     Work = data[:,3]
-    seg_size = 200
+    seg_size = 50
     half_seg_size = seg_size // 2
     half_seg_size_plus = half_seg_size + 1
 
