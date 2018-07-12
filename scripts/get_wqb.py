@@ -11,32 +11,32 @@ def get_Wqb_value(file_duck_dat):
     f.close()
     data = np.array(data[1:])
     Work = data[:,3]
-    #split it into segments of 200 points 
-    num_segments = int(len(data)/200) 
-    num_segments = int(len(data)/200) 
+    seg_size = 50
+    #split it into segments of seg_size points
+    num_segments = int(len(data)/seg_size)
     #alayze each segment to see if minimum in the segment is the local minimum
     #local minimum is the point with the lowest value of 200 neighbouring points
     #first local minumum is miminum used later to duck analysis
     for segment in range(num_segments):
         #detecting minium inthe segment
-        sub_data = data[segment * 200 : (segment + 1) * 200]
+        sub_data = data[segment * seg_size : (segment + 1) * seg_size]
         sub_Work = sub_data[:,3] 
         index_local = np.argmin(sub_Work)
-        #segment of 200 points arround detected minimum
-        index_global = index_local + segment * 200
-        if index_global > 100:
-            sub2_data = data[index_global - 100 : index_global + 101]
+        #segment of  points arround detected minimum
+        index_global = index_local + segment * seg_size
+        if index_global > seg_size/2:
+            sub2_data = data[index_global - seg_size/2 : index_global + seg_size / 2 + 1]
         else:
-            sub2_data = data[0 : index_global + 101]
+            sub2_data = data[0 : index_global + seg_size / 2 + 1]
         sub2_Work = sub2_data[:,3]
         index_local2 = np.argmin(sub2_Work)
-        if index_global < 100:
+        if index_global < seg_size / 2:
             if index_local2 == index_global:
                 
                 Wqb_min_index = index_global
             break
         else:
-            if index_local2 == 100:
+            if index_local2 == seg_size / 2:
                 Wqb_min_index = index_global
     Wqb_min = Work[Wqb_min_index]
     sub_max_data = data[Wqb_min_index:]
