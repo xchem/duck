@@ -12,6 +12,7 @@ import yaml, sys, os
 def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len,params):
     if not os.path.isfile("equil.chk"):
         # A couple of file name
+        orig_file = prot_file
         chunk_protein = "protein_out.pdb"
         chunk_protein_prot = "protein_out_prot.pdb"
         # Do the removal of buffer mols and alt locs
@@ -33,7 +34,7 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
         results = prepare_system(mol2_file,chunk_protein_prot)
         complex = results[0]
         # Now find the interaction and save to a file
-        results = find_interaction(prot_int,prot_file)
+        results = find_interaction(prot_int,orig_file)
         distance = params.get("distance", results[2])
         # Now do the equlibration
         results = do_equlibrate(gpu_id=gpu_id)
