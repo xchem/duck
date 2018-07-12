@@ -27,7 +27,7 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
             chunk_protein_prot = prot_file
         # Paramaterize the ligand
         mol2_file = params.get("mol2_file_prepped", None)
-        if not mol2_file
+        if not mol2_file:
             results = prep_lig(mol_file,prot_code)
             mol2_file = results[0]
         results = prepare_system(mol2_file,chunk_protein_prot)
