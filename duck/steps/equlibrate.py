@@ -18,7 +18,6 @@ def do_equlibrate(force_constant_equilibrate=1.0,gpu_id=0):
     combined_pmd = pickle.load(pickle_in)[0]
     combined_pmd.symmetry=None
     pickle_in.close()
-    key_interaction = cal_ints.find_interaction()
     ##################
     ##################
     #  Minimisation  #

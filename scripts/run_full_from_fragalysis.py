@@ -35,13 +35,13 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
         complex = results[0]
         # Now find the interaction and save to a file
         results = find_interaction(prot_int,orig_file)
-        distance = params.get("distance", results[2])
+        startdist = params.get("distance", results[2])
         # Now do the equlibration
         results = do_equlibrate(gpu_id=gpu_id)
     else:
         # Now find the interaction and save to a file
         results = find_interaction(prot_int,prot_file)
-        startdist = results[2]
+        startdist = params.get("distance", results[2])
     # Open the file and check that the potential is stable and negative
     if not check_if_equlibrated("density.csv",1):
         print("SYSTEM NOT EQUILIBRATED")
