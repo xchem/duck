@@ -27,7 +27,7 @@ def proc_dir(dir_name="1b9v_GLU276_OE2_3100",batch=0,gpu_id=0,new_batch=False):
     atom_num = dir_name.split("_")[3]
     chain_id = "A"
     batch_dir = "BATCH_"+str(batch)
-    if new_batch:
+    if new_batch == True:
         if batch != 0:
             os.chdir("../")
         if not os.path.isdir(batch_dir):
@@ -108,5 +108,8 @@ if __name__ == "__main__":
         print(dir)
         gpu_id = i % 4
         batch = i // 4
-        proc_dir(dir,batch,gpu_id,batch==old_batch)
+        print(batch,gpu_id)
+        new_batch = batch==old_batch
+        print(new_batch)
+        proc_dir(dir,batch,gpu_id,new_batch)
         old_batch=batch
