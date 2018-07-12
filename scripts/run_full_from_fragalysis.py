@@ -9,35 +9,32 @@ from duck.steps.steered_md import run_steered_md
 from duck.utils.check_system import check_if_equlibrated
 import yaml, sys, os
 
-def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len, distance=None,
-                   prepare_chunk=True, remove_buffers=True):
+def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len,params):
     if not os.path.isfile("equil.chk"):
         # A couple of file name
         chunk_protein = "protein_out.pdb"
         chunk_protein_prot = "protein_out_prot.pdb"
-        # Do the removal of buffers etc.
-        if remove_buffers:
+        # Do the removal of buffer mols and alt locs
+        if params.get("remove_buffers",True):
             prot_file = remove_prot_buffers_alt_locs(prot_file)
-
-        # Now it does the magic
-        if prepare_chunk:
+        # Do the chunking and the protonation
+        if params.get("prep_chunk",True):
             # Chunk
             chunk_with_amber(mol_file, prot_file, chunk_protein, cutoff)
             # Protontate
             do_tleap(chunk_protein,chunk_protein_prot)
         else:
             chunk_protein_prot = prot_file
-        results = prep_lig(mol_file,prot_code)
-        mol2_file = results[0]
+        # Paramaterize the ligand
+        mol2_file = params.get("mol2_file_prepped", None)
+        if not mol2_file
+            results = prep_lig(mol_file,prot_code)
+            mol2_file = results[0]
         results = prepare_system(mol2_file,chunk_protein_prot)
         complex = results[0]
         # Now find the interaction and save to a file
         results = find_interaction(prot_int,prot_file)
-        if distance is None:
-            startdist = results[2]
-        else:
-            # Max of 2.5 or distance
-            startdist = distance
+        distance = params.get("distance", results[2])
         # Now do the equlibration
         results = do_equlibrate(gpu_id=gpu_id)
     else:
@@ -78,10 +75,6 @@ def main():
     init_velocity = out_data["init_velocity"]
     num_smd_cycles = out_data["num_smd_cycles"]
     gpu_id = str(out_data["gpu_id"])
-    # Do we set the minimum distance
-    distance = out_data.get("distance",2.5)
-    # Do we prepare the chunk
-    prepare_chunk = out_data.get("prep_chunk",True)
     # Now get the data from Fragalysis
     if "apo_pdb_file" not in out_data or "mol_file" not in out_data:
         results = get_from_prot_code(prot_code)
@@ -90,8 +83,7 @@ def main():
     else:
         prot_file = out_data["apo_pdb_file"]
         mol_file = out_data["mol_file"]
-    run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len, distance,
-                   prepare_chunk)
+    run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len, out_data)
 
 if __name__ == "__main__":
     main()
