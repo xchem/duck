@@ -28,7 +28,7 @@ def get_Wqb_value(file_duck_dat):
     f.close()
     data = np.array(data[1:])
     Work = data[:, 3]
-    seg_size = 50
+    seg_size = 200
     # split it into segments of seg_size points
     num_segments = int(len(data) / seg_size)
     # alayze each segment to see if minimum in the segment is the local minimum
