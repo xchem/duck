@@ -1,6 +1,6 @@
 from simtk.openmm import app
 import parmed
-from duck.steps.chunk import chunk_with_amber,do_tleap
+from duck.steps.chunk import chunk_with_amber,do_tleap,remove_prot_buffers_alt_locs
 
 
 def test_prep(mol_file,prot_file):
@@ -8,7 +8,8 @@ def test_prep(mol_file,prot_file):
     chunk_protein_prot = "protein_out_prot.pdb"
     # Now it does the magic
     # Chunk
-    chunk_with_amber(mol_file, prot_file, chunk_protein, 12)
+    removed = remove_prot_buffers_alt_locs(prot_file)
+    chunk_with_amber(mol_file, removed, chunk_protein, 12)
     # Protontate
     do_tleap(chunk_protein, chunk_protein_prot)
     protein = parmed.load_file(chunk_protein_prot)
