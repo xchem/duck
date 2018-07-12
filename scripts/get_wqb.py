@@ -2,7 +2,7 @@ import numpy as np
 import os,sys
 import matplotlib.pyplot as plt
 
-def get_Wqb_value(file_duck_dat):
+def get_wqb_simple(file_duck_dat):
     f = open(file_duck_dat,'r')
     data = []
     for line in f:
@@ -16,6 +16,9 @@ def get_Wqb_value(file_duck_dat):
     Wqb_value = Wqb_max - Wqb_min
     return(Wqb_value, data, Wqb_min)
 
+
+# TODO Improved method for finding WQB
+
 def get_Wqb_value_all(input_dir):
     file_list = []
     for fil in os.listdir(input_dir):
@@ -25,7 +28,7 @@ def get_Wqb_value_all(input_dir):
     Wqb_values = []
     plt.figure(figsize = (7,7))
     for fil in file_list:
-        Wqb_data = get_Wqb_value(fil)
+        Wqb_data = get_wqb_simple(fil)
         Wqb_values.append(Wqb_data[0])
         plt.plot(1*Wqb_data[1][:,0], Wqb_data[1][:,3]-Wqb_data[2])
 

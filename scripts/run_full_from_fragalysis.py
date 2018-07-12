@@ -46,7 +46,7 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
     if not check_if_equlibrated("density.csv",1):
         print("SYSTEM NOT EQUILIBRATED")
         sys.exit()
-    if params.get("just_equilib",False):
+    if params.get("just_equilib",True):
         print("SYSTEM FENISHED EQULIBRATING")
         return
     # Now do the MD
