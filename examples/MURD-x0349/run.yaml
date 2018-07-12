@@ -1,7 +1,0 @@
-prot_code: "MURD-x0349"
-prot_int: "A_LYS_311_N"
-cutoff: 12
-md_len: 0.5
-init_velocity: 0.00001
-num_smd_cycles: 20
-gpu_id: "0"

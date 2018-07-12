@@ -11,6 +11,7 @@ prot_int: '"""+interaction+"""'
 lig_id: '"""+lig_id+"""'
 cutoff: 12
 md_len: 0.5
+distance: 2.5
 init_velocity: 0.00001
 num_smd_cycles: 20
 gpu_id: '"""+str(gpu_id)+"""'
