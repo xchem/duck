@@ -8,7 +8,7 @@ from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
 import yaml, sys, os
 
-def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len):
+def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len, distance=None):
     if not os.path.isfile("equil.chk"):
         # A couple of file name
         chunk_protein = "protein_out.pdb"
@@ -24,7 +24,11 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
         complex = results[0]
         # Now find the interaction and save to a file
         results = find_interaction(prot_int,prot_file)
-        startdist = results[2]
+        if distance is None:
+            startdist = results[2]
+        else:
+            # Max of 2.5 or distance
+            startdist = max(results[2]-0.2,distance)
         # Now do the equlibration
         results = do_equlibrate(gpu_id=gpu_id)
     else:
@@ -56,8 +60,12 @@ def main():
     init_velocity = out_data["init_velocity"]
     num_smd_cycles = out_data["num_smd_cycles"]
     gpu_id = str(out_data["gpu_id"])
-    # Now get the data from Fragalysis
+    if "distance" in out_data:
+        distance = float(out_data["distance"])
+    else:
+        distance = None
 
+    # Now get the data from Fragalysis
     if "apo_pdb_file" not in out_data or "mol_file" not in out_data:
         results = get_from_prot_code(prot_code)
         prot_file = results[0]
@@ -65,7 +73,7 @@ def main():
     else:
         prot_file = out_data["apo_pdb_file"]
         mol_file = out_data["mol_file"]
-    run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len)
+    run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_velocity, num_smd_cycles, gpu_id, md_len, distance)
 
 if __name__ == "__main__":
     main()
