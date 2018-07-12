@@ -109,7 +109,7 @@ if __name__ == "__main__":
         gpu_id = i % 4
         batch = i // 4
         print(batch,gpu_id)
-        new_batch = batch==old_batch
+        new_batch = batch!=old_batch
         print(new_batch)
         proc_dir(dir,batch,gpu_id,new_batch)
         old_batch=batch
