@@ -25,9 +25,9 @@ def get_Wqb_value(file_duck_dat):
         #segment of  points arround detected minimum
         index_global = index_local + segment * seg_size
         if index_global > seg_size/2:
-            sub2_data = data[index_global - seg_size/2 : index_global + seg_size / 2 + 1]
+            sub2_data = data[index_global - seg_size/2 : index_global + (seg_size / 2 + 1)]
         else:
-            sub2_data = data[0 : index_global + seg_size / 2 + 1]
+            sub2_data = data[0 : index_global + (seg_size / 2 + 1)]
         sub2_Work = sub2_data[:,3]
         index_local2 = np.argmin(sub2_Work)
         if index_global < seg_size / 2:
