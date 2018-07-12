@@ -5,7 +5,7 @@ from parmed.geometry import distance2
 import operator
 import math,os
 
-def gen_yaml(pdb_code, interaction, lig_id, pdb_file, mol_file):
+def gen_yaml(pdb_code, interaction, lig_id, pdb_file, mol_file,gpu_id):
     return """prot_code: '"""+pdb_code+"""'
 prot_int: '"""+interaction+"""'
 lig_id: '"""+lig_id+"""'
@@ -13,12 +13,12 @@ cutoff: 12
 md_len: 0.5
 init_velocity: 0.00001
 num_smd_cycles: 20
-gpu_id: "0"
+gpu_id: '"""+str(gpu_id)+"""'
 apo_pdb_file: '"""+pdb_file+"""'
 mol_file: '"""+mol_file+"""'
 """
 
-def proc_dir(dir_name="1b9v_GLU276_OE2_3100"):
+def proc_dir(dir_name="1b9v_GLU276_OE2_3100",batch=0,gpu_id=0,new_batch=False):
     # This needs fixing for sure
     pdb_code = dir_name.split("_")[0].split("-")[0]
     res_name = dir_name.split("_")[1][:3]
@@ -26,6 +26,13 @@ def proc_dir(dir_name="1b9v_GLU276_OE2_3100"):
     atom_name = dir_name.split("_")[2]
     atom_num = dir_name.split("_")[3]
     chain_id = "A"
+    batch_dir = "BATCH_"+str(batch)
+    if new_batch:
+        if batch != 0:
+            os.chdir("../")
+        if not os.path.isdir(batch_dir):
+            os.mkdir(batch_dir)
+        os.chdir(batch_dir)
     if os.path.isdir(dir_name):
         return
     os.mkdir(dir_name)
@@ -34,7 +41,7 @@ def proc_dir(dir_name="1b9v_GLU276_OE2_3100"):
     lig_id = find_lig_id(pdb_files[0],pdb_files[2],res_name, res_num, atom_name)
     mol_file = get_ligand(lig_id,pdb_code)
     interaction = "_".join([str(x) for x in [chain_id,res_name,res_num,atom_name]])
-    out_yaml = gen_yaml(pdb_code, interaction ,lig_id, pdb_files[0], mol_file)
+    out_yaml = gen_yaml(pdb_code, interaction ,lig_id, pdb_files[0], mol_file,gpu_id)
     out_f = open("run.yaml","w")
     out_f.write(out_yaml)
     os.chdir("../")
@@ -96,6 +103,10 @@ def get_pdb_apo(pdb_code):
 
 if __name__ == "__main__":
     dirs = ['2mcp_ARG52_NH1_781', '1yv3_LEU262_O_3916', '1q1g_GLU184_OE2_2791', '1n2v_ASP156_OD2_2255', '1lpz_ASP189_OD1_3562', '1l7f_GLU227_OE1_2279', '1k3u_SER235_OG_3501', '1hgi_GLY135_O_1984', '1hgh-1_GLY135_O_1985', '1fh8_GLN203_OE1_3004', '1f0t_ASP189_OD1_2470', '1exa_SER289_OG_1722', '1c1b_LYS101_O_1593', '1fh8_TRP273_NE1_4102', '1ydr_VAL123_N_1823', '1v0p_ASP85_OD1_1410', '1ulb_GLU201_OE1_3136', '1rob_PHE120_N_1789', '1n46_ARG316_NH1_1636', '1l7f_ARG118_NH1_568', '1l2s_ALA318_O_4782', '1k1j_ASP189_OD2_2471', '1ivd_ARG118_NH1_569', '1hwi_LYS691_NZ_9397', '1hgj_ASN137_N_1999', '1hgi_TYR98_OH_1438', '1hgh-1_SER136_OG_1992', '1fhd-2_GLU127_OE2_1871', '1fh9_GLU233_OE2_3481', '1fh9_ASN126_ND2_1856', '1f0u_SER190_OG_2481', '1exa_MET272_SD_1437', '1br6_VAL81_O_1295', '1b9v_GLU276_OE2_3100']
-    for dir in dirs:
+    old_batch = -1
+    for i,dir in enumerate(dirs):
         print(dir)
-        proc_dir(dir)
+        gpu_id = i % 4
+        batch = i // 4
+        proc_dir(dir,batch,gpu_id,batch==old_batch)
+        old_batch=batch
