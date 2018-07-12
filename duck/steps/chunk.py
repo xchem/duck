@@ -64,16 +64,20 @@ def convert_to_ace_nme(subset):
                         atom.name = "CH3"
     return subset
 
+def remove_prot_buffers_alt_locs(prot_file):
+    output_file = "no_buffer_altlocs.pdb"
+    solvents = ["NA","CL","SO4","EDO","FMT","P04"]
+    protein = parmed.load_file(prot_file)["!(:HOH,"+",".join(solvents)+")"]
+    protein.write_pdb(output_file, altlocs="first")
+    return output_file
 
 def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=7.0):
     # Load up the topology
-    protein = parmed.load_file(prot_file)["!(:HOH,NA,CL,SO4,EDO,FMT)"]
-    protein.write_pdb("no_altlocs.pdb", altlocs="first")
-    protein = parmed.load_file("no_altlocs.pdb")
     mol = Chem.MolFromMolFile(mol_file)
     pdb_mol_file = mol_file.replace(".mol",".pdb")
     Chem.MolToPDBFile(mol,pdb_mol_file)
     ligand = parmed.load_file(pdb_mol_file)
+    protein = parmed.load_file(prot_file)
     merged = ligand + protein
     mask = parmed.amber.AmberMask(merged, ":1<:"+str(cutoff))
     residues = set([merged.atoms[i].residue for i, x in enumerate(mask.Selection()) if x == 1])
