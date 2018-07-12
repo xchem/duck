@@ -12,9 +12,9 @@ options:
 
 molecules:
   prot:
-    filepath:
+    filepath: protein_prepared.pdb
   lig:
-    filepath:
+    filepath: MURD-x0349_params.mol2
     epik:
       select: !Combinatorial [0, 1, 2]
       ph: 7.4

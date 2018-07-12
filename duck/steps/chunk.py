@@ -67,7 +67,7 @@ def convert_to_ace_nme(subset):
 
 def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=7.0):
     # Load up the topology
-    protein = parmed.load_file(prot_file)["!(:HOH,NA,CL,SO4,EDO)"]
+    protein = parmed.load_file(prot_file)["!(:HOH,NA,CL,SO4,EDO,FMT)"]
     protein.write_pdb("no_altlocs.pdb", altlocs="first")
     protein = parmed.load_file("no_altlocs.pdb")
     mol = Chem.MolFromMolFile(mol_file)
