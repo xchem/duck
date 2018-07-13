@@ -23,7 +23,7 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
             # Chunk
             chunk_with_amber(mol_file, prot_file, chunk_protein, cutoff)
             # Protontate
-            disulfides = find_disulfides(prot_file)
+            disulfides = find_disulfides(chunk_protein)
             do_tleap(chunk_protein,chunk_protein_prot,disulfides)
         else:
             chunk_protein_prot = prot_file
