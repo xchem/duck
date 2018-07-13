@@ -6,7 +6,7 @@ from parmed.geometry import distance2
 
 def return_tleap(prot_protein_chunk, out_save, disulfides=[]):
     param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.ff14SB.redq")
-    bond_list = ["bond mol."+str(num[0])+".SG mol."+str(num[0])+".SG " for num in disulfides]
+    bond_list = ["bond mol."+str(num[0]-1)+".SG mol."+str(num[0]-1)+".SG " for num in disulfides]
     return """source """+param_f_path+"""
 mol = loadpdb """ + prot_protein_chunk + """
 """+"\n".join(bond_list)+"""
