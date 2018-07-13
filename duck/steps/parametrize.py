@@ -8,6 +8,18 @@ import sys, os
 import pickle
 from duck.utils.gen_system import generateSMIRNOFFStructureRDK
 
+
+def find_box_size(input_file="complex.pdb",mult_factor=1.5):
+    complex = parmed.load_file(input_file)
+    x_coords = [x[0] for x in complex.positions]
+    y_coords = [x[1] for x in complex.positions]
+    z_coords = [x[2] for x in complex.positions]
+    x_size = abs(max(x_coords)-min(x_coords))
+    y_size = abs(max(y_coords)-min(y_coords))
+    z_size = abs(max(z_coords)-min(z_coords))
+    return mult_factor*max(x_size,y_size,z_size)
+
+
 def prepare_system(ligand_file, protein_file, forcefield_str='amber99sb.xml'):
     print("Preparing ligand")
     lig_rdk = Chem.MolFromMol2File(ligand_file, sanitize=False)
@@ -29,7 +41,7 @@ def prepare_system(ligand_file, protein_file, forcefield_str='amber99sb.xml'):
     # 0.1 in Vec3 because box_size is in angstrom and fixer uses nanometer
     # scaling factor to somehow ensure no interaction with periodic image
     scaling_factor = 1.0
-    box_size = 50
+    box_size = int(find_box_size("complex.pdb"))
     fixer.addSolvent(scaling_factor * box_size * openmm.Vec3(0.1, 0.1, 0.1), positiveIon='Na+', negativeIon='Cl-',
                      ionicStrength=0.1 * unit.molar)
     app.PDBFile.writeFile(fixer.topology, fixer.positions, open('complex_solvated.pdb', 'w'))
