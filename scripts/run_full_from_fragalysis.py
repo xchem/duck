@@ -2,7 +2,7 @@ from duck.steps.parametrize import prepare_system
 from duck.utils.get_from_fragalysis import get_from_prot_code
 from duck.utils.cal_ints import find_interaction
 from duck.steps.prepare import prep_lig
-from duck.steps.chunk import chunk_with_amber,do_tleap,remove_prot_buffers_alt_locs
+from duck.steps.chunk import chunk_with_amber,do_tleap,remove_prot_buffers_alt_locs,find_disulfides
 from duck.steps.equlibrate import do_equlibrate
 from duck.steps.normal_md import perform_md
 from duck.steps.steered_md import run_steered_md
@@ -23,7 +23,8 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
             # Chunk
             chunk_with_amber(mol_file, prot_file, chunk_protein, cutoff)
             # Protontate
-            do_tleap(chunk_protein,chunk_protein_prot)
+            disulfides = find_disulfides(prot_file)
+            do_tleap(chunk_protein,chunk_protein_prot,disulfides)
         else:
             chunk_protein_prot = prot_file
         # Paramaterize the ligand

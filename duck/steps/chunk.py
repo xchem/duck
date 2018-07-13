@@ -4,18 +4,20 @@ import parmed
 from parmed.geometry import distance2
 
 
-def return_tleap(prot_protein_chunk, out_save):
+def return_tleap(prot_protein_chunk, out_save, disulfides=[]):
     param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.ff14SB.redq")
+    bond_list = ["bond mol."+str(num[0])+".SG mol."+str(num[0])+".SG " for num in disulfides]
     return """source """+param_f_path+"""
 mol = loadpdb """ + prot_protein_chunk + """
+"""+"\n".join(bond_list)+"""
 savepdb mol """ + out_save + """
 quit"""
 
 
-def do_tleap(prot_protein_chunk, out_save):
+def do_tleap(prot_protein_chunk, out_save, disulfides=[]):
     # Now do tleap
     out_f = open("run.tleap","w")
-    out_f.write(return_tleap(prot_protein_chunk, out_save))
+    out_f.write(return_tleap(prot_protein_chunk, out_save,disulfides))
     out_f.close()
     os.system("tleap -f run.tleap")
 
@@ -74,7 +76,7 @@ def remove_prot_buffers_alt_locs(prot_file):
     return output_file
 
 
-def fix_disulfides(input_file, output_file, threshold=6.2):
+def find_disulfides(input_file, threshold=6.2):
     structure = parmed.load_file(input_file)
     sulfurs = [x for x in structure.atoms if x.residue.name == "CYS" and x.name == "SG"]
     disulfides = []
@@ -83,11 +85,8 @@ def fix_disulfides(input_file, output_file, threshold=6.2):
             if atom_one.idx >= atom_two.idx: continue
             dist = distance2(atom_one,atom_two)
             if dist < threshold:
-                atom_one.residue.name="CYX"
-                atom_two.residue.name="CYX"
-                disulfides.append((atom_one,atom_two))
-    structure.write_pdb(output_file)
-    return output_file,disulfides
+                disulfides.append((atom_one.residue.number,atom_two.residue.number))
+    return disulfides
 
 
 
@@ -114,7 +113,6 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     subset.write_pdb(out_save)
     add_ter_records(out_save,out_save)
     # Fix Disulfides to CYX for Tleap
-    fix_disulfides(out_save,out_save)
     return [out_save]
 
 def prot_with_pdb_fixer(chunk_protein, chunk_prot_protein):
