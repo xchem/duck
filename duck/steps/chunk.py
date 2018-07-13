@@ -1,6 +1,8 @@
 import os,pkg_resources
 from rdkit import Chem
 import parmed
+from parmed.geometry import distance2
+
 
 def return_tleap(prot_protein_chunk, out_save):
     param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.ff14SB.redq")
@@ -71,6 +73,24 @@ def remove_prot_buffers_alt_locs(prot_file):
     protein.write_pdb(output_file, altlocs="first")
     return output_file
 
+
+def fix_disulfides(input_file, output_file, threshold=6.2):
+    structure = parmed.load_file(input_file)
+    sulfurs = [x for x in structure.atoms if x.residue.name == "CYS" and x.name == "SG"]
+    disulfides = []
+    for atom_one  in sulfurs:
+        for atom_two in sulfurs:
+            if atom_one.idx >= atom_two.idx: continue
+            dist = distance2(atom_one,atom_two)
+            if dist < threshold:
+                atom_one.residue.name="CYX"
+                atom_two.residue.name="CYX"
+                disulfides.append((atom_one,atom_two))
+    structure.write_pdb(output_file)
+    return output_file,disulfides
+
+
+
 def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=7.0):
     # Load up the topology
     mol = Chem.MolFromMolFile(mol_file)
@@ -93,6 +113,8 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     subset = convert_to_ace_nme(subset)
     subset.write_pdb(out_save)
     add_ter_records(out_save,out_save)
+    # Fix Disulfides to CYX for Tleap
+    fix_disulfides(out_save,out_save)
     return [out_save]
 
 def prot_with_pdb_fixer(chunk_protein, chunk_prot_protein):
