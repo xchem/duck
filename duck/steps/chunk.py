@@ -85,7 +85,10 @@ def find_disulfides(input_file, threshold=6.2):
             if atom_one.idx >= atom_two.idx: continue
             dist = distance2(atom_one,atom_two)
             if dist < threshold:
+                atom_one.residue.name = "CYX"
+                atom_two.residue.name = "CYX"
                 disulfides.append((atom_one.residue.number,atom_two.residue.number))
+    structure.write_pdb(input_file)
     return disulfides
 
 
@@ -112,7 +115,6 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     subset = convert_to_ace_nme(subset)
     subset.write_pdb(out_save)
     add_ter_records(out_save,out_save)
-    # Fix Disulfides to CYX for Tleap
     return [out_save]
 
 def prot_with_pdb_fixer(chunk_protein, chunk_prot_protein):
