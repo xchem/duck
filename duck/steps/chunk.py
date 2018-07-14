@@ -62,7 +62,6 @@ def convert_to_ace_nme(subset):
         elif len(residue)==2:
             if set([x.name for x in residue.atoms]) == set(["CA","N"]):
                 residue.name="NME"
-                print("HERE")
                 for atom in residue.atoms:
                     if atom.name == "CA":
                         atom.name = "CH3"
@@ -87,8 +86,6 @@ def find_disulfides(input_file, threshold=6.2):
             if atom_one.idx >= atom_two.idx: continue
             dist = distance2(atom_one,atom_two)
             if dist < threshold:
-                print(atom_one.residue.name)
-                print(atom_two.residue.name)
                 atom_one.residue.name = "CYX"
                 atom_two.residue.name = "CYX"
                 disulfides.append((atom_one.residue.number,atom_two.residue.number))
