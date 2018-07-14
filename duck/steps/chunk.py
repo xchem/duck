@@ -36,7 +36,6 @@ def find_neighbour_residues(residues):
         residue_set = set()
         for atom in resid.atoms:
             for x in atom.bond_partners:
-                if x.name=="SG" and atom.name=="SG":print(atom,x)
                 residue_set.add(x.residue)
                 atom_set = add_cap(x,atom_set)
         out_d[resid] = residue_set
@@ -69,6 +68,7 @@ def convert_to_ace_nme(subset):
                         atom.name = "CH3"
     return subset
 
+
 def remove_prot_buffers_alt_locs(prot_file):
     output_file = "no_buffer_altlocs.pdb"
     solvents = ["NA","CL","SO4","EDO","FMT","P04"]
@@ -86,6 +86,8 @@ def find_disulfides(input_file, threshold=6.2):
             if atom_one.idx >= atom_two.idx: continue
             dist = distance2(atom_one,atom_two)
             if dist < threshold:
+                print(atom_one.residue.name)
+                print(atom_two.residue.name)
                 atom_one.residue.name = "CYX"
                 atom_two.residue.name = "CYX"
                 disulfides.append((atom_one.residue.number,atom_two.residue.number))
