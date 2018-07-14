@@ -43,13 +43,15 @@ def find_neighbour_residues(residues):
 
 def find_neighbours(residues):
     out_d,atom_set = find_neighbour_residues(residues)
+    new_residues = set()
     for resid_one in out_d:
         for resid_two in out_d:
             if resid_one == resid_two: continue
             join = out_d[resid_two].intersection(out_d[resid_one])
             for new_res in join:
                 residues.add(new_res)
-    return residues,atom_set
+                new_residues.add(new_res)
+    return new_residues,atom_set
 
 def convert_to_ace_nme(subset):
     for residue in subset.residues:
@@ -106,7 +108,11 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     residues = set([merged.atoms[i].residue for i, x in enumerate(mask.Selection()) if x == 1])
     residues = set([x for x in residues if x.name != "UNL"])
     # # Find all the residues that are connected to two residues in this list of residues.
-    neighbour_residues,atom_set = find_neighbours(residues)
+    new_residues,atom_set = find_neighbours(residues)
+    # Find the residues that are related to any of the new ones
+    new_new_residues,atom_set = find_neighbours(new_residues)
+    # Now add new_residues to residues
+    residues.union(new_residues)
     # Collect the atoms
     atom_idx = []
     for res in residues:
