@@ -36,6 +36,7 @@ def find_neighbour_residues(residues):
         residue_set = set()
         for atom in resid.atoms:
             for x in atom.bond_partners:
+                if x.name=="SG" and atom.name=="SG":print(atom,x)
                 residue_set.add(x.residue)
                 atom_set = add_cap(x,atom_set)
         out_d[resid] = residue_set
