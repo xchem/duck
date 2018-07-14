@@ -109,8 +109,10 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     residues = set([x for x in residues if x.name != "UNL"])
     # # Find all the residues that are connected to two residues in this list of residues.
     new_residues,atom_set = find_neighbours(residues)
+    print(new_residues)
     # Find the residues that are related to any of the new ones
     new_new_residues,new_atom_set = find_neighbours(new_residues)
+    print(new_new_residues)
     # Now add new_residues to residues
     residues.union(new_residues)
     atom_set.union(new_atom_set)
