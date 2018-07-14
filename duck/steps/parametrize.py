@@ -17,7 +17,7 @@ def find_box_size(input_file="complex.pdb",mult_factor=1.5):
     x_size = abs(max(x_coords)-min(x_coords))
     y_size = abs(max(y_coords)-min(y_coords))
     z_size = abs(max(z_coords)-min(z_coords))
-    return 10 +max(x_size,y_size,z_size)
+    return 10 + int(max(x_size,y_size,z_size))
 
 
 def prepare_system(ligand_file, protein_file, forcefield_str='amber99sb.xml'):
