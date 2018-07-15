@@ -30,25 +30,33 @@ def add_cap(x, atom_set):
     return atom_set
 
 def find_neighbour_residues(residues):
-    out_d = {}
+    single_joins = {}
+    double_joins = {}
     atom_set = set()
     for resid in residues:
         residue_set = set()
+        double_res_set = set()
         for atom in resid.atoms:
             for x in atom.bond_partners:
                 residue_set.add(x.residue)
+                for atom_two in x.residue.atoms:
+                    for conn_two in atom_two.bond_partners:
+                        double_res_set.add(conn_two.residue)
                 atom_set = add_cap(x,atom_set)
-        out_d[resid] = residue_set
-    return out_d,atom_set
+        single_joins[resid] = residue_set
+        double_joins[resid] = double_res_set
+    return single_joins,double_joins,atom_set
 
 def find_neighbours(residues):
-    out_d,atom_set = find_neighbour_residues(residues)
+    single_joins, double_joins, atom_set = find_neighbour_residues(residues)
     new_residues = set()
-    for resid_one in out_d:
-        for resid_two in out_d:
+    for resid_one in single_joins:
+        for resid_two in single_joins:
             if resid_one == resid_two: continue
-            join = out_d[resid_two].intersection(out_d[resid_one])
-            for new_res in join:
+            single_join = single_joins[resid_two].intersection(single_joins[resid_one])
+            double_join = single_joins[resid_two].intersection(single_joins[resid_one])
+            single_join.union(double_join)
+            for new_res in single_join:
                 residues.add(new_res)
                 new_residues.add(new_res)
     return new_residues,atom_set
