@@ -43,6 +43,7 @@ def find_neighbour_residues(residues):
                     for conn_two in atom_two.bond_partners:
                         double_res_set.add(conn_two.residue)
                 atom_set = add_cap(x,atom_set)
+        double_res_set.difference_update(residue_set)
         single_joins[resid] = residue_set
         double_joins[resid] = double_res_set
     return single_joins,double_joins,atom_set
@@ -59,7 +60,7 @@ def find_neighbours(residues):
             print(single_join)
             print(double_join)
             print("#########")
-            #single_join.union(double_join)
+            single_join.union(double_join)
             for new_res in single_join:
                 residues.add(new_res)
                 new_residues.add(new_res)
