@@ -60,8 +60,8 @@ def find_neighbours(residues):
             print(single_join)
             print(double_join)
             print("#########")
-            print(single_join.union(double_join))
-            for new_res in single_join:
+            new_set = single_join.union(double_join)
+            for new_res in new_set:
                 residues.add(new_res)
                 new_residues.add(new_res)
     return new_residues,atom_set
