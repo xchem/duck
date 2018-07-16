@@ -57,6 +57,8 @@ def find_neighbours(residues):
             single_join = single_joins[resid_two].intersection(single_joins[resid_one])
             if resid_one not in single_joins[resid_two]:
                 double_join = double_joins[resid_two].intersection(single_joins[resid_one])
+            else:
+                double_join = set()
             print("#########")
             print(single_join)
             print(double_join)
