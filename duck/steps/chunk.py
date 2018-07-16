@@ -59,10 +59,6 @@ def find_neighbours(residues):
                 double_join = double_joins[resid_two].intersection(single_joins[resid_one])
             else:
                 double_join = set()
-            print("#########")
-            print(single_join)
-            print(double_join)
-            print("#########")
             new_set = single_join.union(double_join)
             for new_res in new_set:
                 residues.add(new_res)
