@@ -60,7 +60,7 @@ def find_neighbours(residues):
             print(single_join)
             print(double_join)
             print("#########")
-            single_join.union(double_join)
+            print(single_join.union(double_join))
             for new_res in single_join:
                 residues.add(new_res)
                 new_residues.add(new_res)
