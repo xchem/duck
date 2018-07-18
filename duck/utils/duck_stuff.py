@@ -110,7 +110,6 @@ def getAtomSerialFromAmberMaskHbond(combined_pmd,resnumber,atomname,distance,lig
 def setUpNPTEquilibration(system,combined_pmd,platform,platformProperties,positions,velocities):
     system.addForce(mm.MonteCarloBarostat(1.0*u.bar, 300*u.kelvin))
     integrator = mm.LangevinIntegrator(300*u.kelvin, 4/u.picosecond, 0.002*u.picosecond)
-
     # Define simulation
     simulation = app.Simulation(combined_pmd.topology, system, integrator, platform,platformProperties)
     simulation.context.setPositions(positions)

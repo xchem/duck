@@ -76,7 +76,7 @@ def do_equlibrate(force_constant_equilibrate=1.0,gpu_id=0):
     # Equlibration - density #
     ##########################
     ##########################
-    simulation = duck_stuff.setUpNPTEquilibration(system,combined_pmd,platform,platformProperties,positions,velocities)
+    simulation = duck_stuff.setUpNPTEquilibration(system, combined_pmd,platform, platformProperties, positions, velocities)
     # Reporters
     simulation.reporters.append(app.StateDataReporter("density.csv", 1000, time=True, potentialEnergy=True, temperature=True, density=True, remainingTime=True, speed=True, totalSteps=50000))
     # Correcting the density

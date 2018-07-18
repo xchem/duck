@@ -55,6 +55,7 @@ def find_neighbours(residues):
         for resid_two in single_joins:
             if resid_one == resid_two: continue
             single_join = single_joins[resid_two].intersection(single_joins[resid_one])
+            # If it's just a terminal residue
             if resid_one not in single_joins[resid_two]:
                 double_join = double_joins[resid_two].intersection(single_joins[resid_one])
             else:

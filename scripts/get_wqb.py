@@ -16,7 +16,6 @@ def get_wqb_simple(file_duck_dat):
     Wqb_value = Wqb_max - Wqb_min
     return(Wqb_value, data, Wqb_min)
 
-
 # TODO Improved method for finding WQB
 
 def get_Wqb_value(file_duck_dat):
