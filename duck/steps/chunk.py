@@ -67,6 +67,7 @@ def find_neighbours(residues):
     return new_residues,atom_set
 
 def convert_to_ace_nme(subset):
+    remove_res_ids=[]
     for residue in subset.residues:
         if len(residue)==3:
             if set([x.name for x in residue.atoms]) == set(["CA","C","O"]):
@@ -80,7 +81,9 @@ def convert_to_ace_nme(subset):
                 for atom in residue.atoms:
                     if atom.name == "CA":
                         atom.name = "CH3"
-    return subset
+            elif set([x.name for x in residue.atoms]) == set(["CB","SG"]):
+                remove_res_ids.append(residue.idx+1)
+    return subset["!(:"+",".join(remove_res_ids)+")"]
 
 
 def remove_prot_buffers_alt_locs(prot_file):
