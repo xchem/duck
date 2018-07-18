@@ -82,7 +82,7 @@ def convert_to_ace_nme(subset):
                     if atom.name == "CA":
                         atom.name = "CH3"
             elif set([x.name for x in residue.atoms]) == set(["CB","SG"]):
-                remove_res_ids.append(residue.idx+1)
+                remove_res_ids.append(str(residue.idx+1))
     return subset["!(:"+",".join(remove_res_ids)+")"]
 
 
