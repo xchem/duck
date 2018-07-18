@@ -9,7 +9,8 @@ class PDBPrepTestCase(unittest.TestCase):
         structure_one = parmed.load_file(pdb_file_one)
         structure_two = parmed.load_file(pdb_file_two)
         # Do they have the same length
-        self.assertEqual(len(structure_one.residues),len(structure_two.residues))
+        print(pdb_file_one + ": "+str(len(structure_one.residues)))
+        print(pdb_file_two + ": "+str(len(structure_two.residues)))
         # Do they have the same member
         self.assertListEqual(structure_one.residue,structure_two.residues)
 
