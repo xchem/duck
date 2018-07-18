@@ -21,7 +21,7 @@ def run_simulation(prot_file, mol_file, prot_code, prot_int, cutoff, init_veloci
         # Do the chunking and the protonation
         if params.get("prep_chunk",True):
             # Chunk
-            chunk_with_amber(mol_file, prot_file, prot_int, chunk_protein, cutoff)
+            chunk_with_amber(mol_file, prot_file, prot_int, chunk_protein, cutoff, orig_file)
             # Protontate
             disulfides = find_disulfides(chunk_protein)
             do_tleap(chunk_protein,chunk_protein_prot,disulfides)

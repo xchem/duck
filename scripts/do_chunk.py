@@ -10,7 +10,7 @@ def main(prot_file, mol_file, interaction, cutoff):
     prot_file = remove_prot_buffers_alt_locs(prot_file)
     # Do the chunking and the protonation
     # Chunk
-    chunk_with_amber(mol_file,prot_file,interaction,chunk_protein,cutoff)
+    chunk_with_amber(mol_file,prot_file,interaction,chunk_protein,cutoff,orig_file)
     # Protontate
     disulfides = find_disulfides(chunk_protein)
     do_tleap(chunk_protein, chunk_protein_prot, disulfides)

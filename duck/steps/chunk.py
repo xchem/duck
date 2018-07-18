@@ -2,7 +2,7 @@ import os,pkg_resources
 from rdkit import Chem
 import parmed
 from parmed.geometry import distance2
-
+from duck.utils.cal_ints import find_atom
 
 def return_tleap(prot_protein_chunk, out_save, disulfides=[]):
     param_f_path = pkg_resources.resource_filename('duck', "parameters/tleap/leaprc.ff14SB.redq")
@@ -115,7 +115,7 @@ def find_res_idx(protein, chain, res_name, res_num):
                 if residue.number==res_num:
                     return residue.idx + 1
 
-def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", interaction="A_LYS_311_N", out_save="protein_out.pdb", cutoff=9.0):
+def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", interaction="A_LYS_311_N", out_save="protein_out.pdb", cutoff=9.0, orig_prot="MURD-x0349_apo.pdb"):
     # Load up the topology
     mol = Chem.MolFromMolFile(mol_file)
     pdb_mol_file = mol_file.replace(".mol",".pdb")
@@ -126,7 +126,7 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     res_name = interaction.split("_")[1]
     res_num = int(interaction.split("_")[2])
     atom_name = interaction.split("_")[3]
-    res_idx = find_res_idx(protein, chain, res_name, res_num)
+    res_idx = find_atom(interaction, orig_prot, protein)
     mask = parmed.amber.AmberMask(protein, ":"+str(res_idx)+"@"+atom_name+"<:"+str(cutoff))
     print(mask)
     residues = set([protein.atoms[i].residue for i, x in enumerate(mask.Selection()) if x == 1])
