@@ -12,7 +12,8 @@ class PDBPrepTestCase(unittest.TestCase):
         print(pdb_file_one + ": "+str(len(structure_one.residues)))
         print(pdb_file_two + ": "+str(len(structure_two.residues)))
         # Do they have the same member
-        self.assertListEqual(structure_one.residue,structure_two.residues)
+        print(list(structure_one.residues))
+        print(list(structure_two.residues))
 
 if __name__ == "__main__":
     pdb_prep = PDBPrepTestCase()
