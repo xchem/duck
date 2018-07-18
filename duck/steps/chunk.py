@@ -107,18 +107,29 @@ def find_disulfides(input_file, threshold=6.2):
     structure.write_pdb(input_file)
     return disulfides
 
+def find_res_idx(protein, chain, res_name, res_num):
+    print(chain, res_name, res_num)
+    for residue in protein.residues:
+        if residue.chain == chain:
+            if residue.name==res_name:
+                if residue.number==res_num:
+                    return residue.idx + 1
 
-
-def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", out_save="protein_out.pdb", cutoff=7.0):
+def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", interaction="A_LYS_311_N", out_save="protein_out.pdb", cutoff=9.0):
     # Load up the topology
     mol = Chem.MolFromMolFile(mol_file)
     pdb_mol_file = mol_file.replace(".mol",".pdb")
     Chem.MolToPDBFile(mol,pdb_mol_file)
-    ligand = parmed.load_file(pdb_mol_file)
     protein = parmed.load_file(prot_file)
-    merged = ligand + protein
-    mask = parmed.amber.AmberMask(merged, ":1<:"+str(cutoff))
-    residues = set([merged.atoms[i].residue for i, x in enumerate(mask.Selection()) if x == 1])
+    # get these details
+    chain = interaction.split("_")[0]
+    res_name = interaction.split("_")[1]
+    res_num = int(interaction.split("_")[2])
+    atom_name = interaction.split("_")[3]
+    res_idx = find_res_idx(protein, chain, res_name, res_num)
+    mask = parmed.amber.AmberMask(protein, ":"+str(res_idx)+"@"+atom_name+"<:"+str(cutoff))
+    print(mask)
+    residues = set([protein.atoms[i].residue for i, x in enumerate(mask.Selection()) if x == 1])
     residues = set([x for x in residues if x.name != "UNL"])
     # # Find all the residues that are connected to two residues in this list of residues.
     new_residues,atom_set = find_neighbours(residues)
@@ -127,7 +138,7 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     for res in residues:
         atom_idx.extend([x.idx for x in res.atoms if x.altloc in ["","A"]])
     atom_idx.extend(atom_set)
-    subset = merged[atom_idx]
+    subset = protein[atom_idx]
     subset.write_pdb(out_save.replace(".pdb","_no_ace_nme.pdb"))
     subset = convert_to_ace_nme(subset)
     subset.write_pdb(out_save)
