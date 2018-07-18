@@ -13,6 +13,6 @@ class PDBPrepTestCase(unittest.TestCase):
         # Do they have the same member
         self.assertListEqual(structure_one.residue,structure_two.residues)
 
-if __name__ is "__main__":
+if __name__ == "__main__":
     pdb_prep = PDBPrepTestCase()
     pdb_prep.test_res_equal(pdb_file_one=sys.argv[1], pdb_file_two=sys.argv[2])
