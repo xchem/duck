@@ -122,12 +122,8 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     Chem.MolToPDBFile(mol,pdb_mol_file)
     protein = parmed.load_file(prot_file)
     # get these details
-    chain = interaction.split("_")[0]
-    res_name = interaction.split("_")[1]
-    res_num = int(interaction.split("_")[2])
-    atom_name = interaction.split("_")[3]
-    res_idx = find_atom(interaction, orig_prot, protein)
-    mask = parmed.amber.AmberMask(protein, ":"+str(res_idx)+"@"+atom_name+"<:"+str(cutoff))
+    atom_idx,prot_atom = find_atom(interaction, orig_prot, protein)
+    mask = parmed.amber.AmberMask(protein, "@"+str(atom_idx[0][0]+1)+"<:"+str(cutoff))
     print(mask)
     residues = set([protein.atoms[i].residue for i, x in enumerate(mask.Selection()) if x == 1])
     residues = set([x for x in residues if x.name != "UNL"])
