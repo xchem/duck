@@ -139,7 +139,7 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     atom_idx.extend(atom_set)
     subset = protein[atom_idx]
     subset.write_pdb(out_save.replace(".pdb","_no_ace_nme.pdb"))
-    subset = convert_to_ace_nme(subset)
+    subset = convert_to_ace_nme(parmed.load_file(out_save.replace(".pdb","_no_ace_nme.pdb")))
     subset.write_pdb(out_save)
     add_ter_records(out_save,out_save)
     return [out_save]
