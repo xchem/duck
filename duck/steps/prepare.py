@@ -7,6 +7,9 @@ def prep_lig(mol_file,prefix):
     protonated_mol = prefix + "_hs.mol"
     rd_mol = Chem.MolFromMolFile(mol_file)
     rd_mol = AllChem.AddHs(rd_mol,addCoords=True)
+    # Remove aliases - otherwise charge isn't seen by antechamber.. (sigh)
+    for atom in rd_mol.GetAtoms():
+        atom.SetProp('molFileAlias', '')
     Chem.MolToMolFile(rd_mol,protonated_mol)
     net_charge = AllChem.GetFormalCharge(rd_mol)
     # Defined the final out file
