@@ -37,10 +37,24 @@ def find_neighbour_residues(residues):
         residue_set = set()
         double_res_set = set()
         for atom in resid.atoms:
-            for x in atom.bond_partners:
+            for bond_1 in atom.bonds:
+                if bond_1.measure() >3.0:
+                    print("Skipping too long bond (" + str(bond_1.measure()) + ") :  ", bond_1.atom1, bond_1.atom2)
+                    continue
+                if bond_1.atom1==atom:
+                    x = bond_1.atom2
+                else:
+                    x = bond_1.atom1
                 residue_set.add(x.residue)
                 for atom_two in x.residue.atoms:
-                    for conn_two in atom_two.bond_partners:
+                    for bond_2 in atom_two.bonds:
+                        if bond_2.measure() > 3.0:
+                            print("Skipping too long bond ("+str(bond_2.measure())+") :  ", bond_2.atom1, bond_2.atom2)
+                            continue
+                        if bond_2.atom1 == atom:
+                            conn_two = bond_2.atom2
+                        else:
+                            conn_two = bond_2.atom1
                         double_res_set.add(conn_two.residue)
                 atom_set = add_cap(x,atom_set)
         double_res_set.difference_update(residue_set)
@@ -114,7 +128,6 @@ def find_disulfides(input_file, threshold=6.2):
     return disulfides
 
 def find_res_idx(protein, chain, res_name, res_num):
-    print(chain, res_name, res_num)
     for residue in protein.residues:
         if residue.chain == chain:
             if residue.name==res_name:
@@ -130,7 +143,6 @@ def chunk_with_amber(mol_file="MURD-x0349.mol", prot_file="MURD-x0349_apo.pdb", 
     # get these details
     atom_idx,prot_atom = find_atom(interaction, orig_prot, protein)
     mask = parmed.amber.AmberMask(protein, "@"+str(atom_idx[0][0]+1)+"<:"+str(cutoff))
-    print(mask)
     residues = set([protein.atoms[i].residue for i, x in enumerate(mask.Selection()) if x == 1])
     residues = set([x for x in residues if x.name != "UNL"])
     # # Find all the residues that are connected to two residues in this list of residues.
