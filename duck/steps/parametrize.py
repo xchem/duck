@@ -9,7 +9,7 @@ import pickle
 from duck.utils.gen_system import generateSMIRNOFFStructureRDK
 
 
-def find_box_size(input_file="complex.pdb",add_factor=10):
+def find_box_size(input_file="complex.pdb",add_factor=20):
     complex = parmed.load_file(input_file)
     x_coords = [x[0] for x in complex.positions]
     y_coords = [x[1] for x in complex.positions]
