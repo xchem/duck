@@ -82,13 +82,21 @@ def find_neighbours(residues):
 
 def convert_to_ace_nme(subset):
     remove_res_ids=[]
+    remove_atom_ids = []
     for residue in subset.residues:
         if len(residue)==3:
-            if set([x.name for x in residue.atoms]) == set(["CA","C","O"]):
+            if set([x.name for x in residue.atoms]) == [set(["CA","C","O"])]:
                 residue.name="ACE"
                 for atom in residue.atoms:
                     if atom.name == "CA":
                         atom.name = "CH3"
+            if set([x.name for x in residue.atoms]) == [set(["CA","CD","N"])]:
+                residue.name = "NME"
+                for atom in residue.atoms:
+                    if atom.name == "CA":
+                        atom.name = "CH3"
+                    if atom.name == "CD":
+                        remove_atom_ids.apend(atom.idx)
         elif len(residue)==2:
             if set([x.name for x in residue.atoms]) == set(["CA","N"]):
                 residue.name="NME"
@@ -97,10 +105,11 @@ def convert_to_ace_nme(subset):
                         atom.name = "CH3"
             elif set([x.name for x in residue.atoms]) == set(["CB","SG"]):
                 remove_res_ids.append(str(residue.idx+1))
+    if remove_atom_ids != []:
+        subset = subset["!(@"+",".join(remove_atom_ids)+")"]
     if remove_res_ids != []:
-        return subset["!(:"+",".join(remove_res_ids)+")"]
-    else:
-        return subset
+        subset = subset["!(:"+",".join(remove_res_ids)+")"]
+    return subset
 
 
 def remove_prot_buffers_alt_locs(prot_file):
