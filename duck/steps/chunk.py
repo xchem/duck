@@ -97,7 +97,7 @@ def convert_to_ace_nme(subset):
                     if atom.name == "CA":
                         atom.name = "CH3"
                     if atom.name == "CD":
-                        remove_atom_ids.apend(atom.idx)
+                        remove_atom_ids.append(atom.idx)
         elif len(residue)==2:
             if set([x.name for x in residue.atoms]) == set(["CA","N"]):
                 residue.name="NME"
