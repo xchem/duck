@@ -85,12 +85,13 @@ def convert_to_ace_nme(subset):
     remove_atom_ids = []
     for residue in subset.residues:
         if len(residue)==3:
-            if set([x.name for x in residue.atoms]) == [set(["CA","C","O"])]:
+            if set([x.name for x in residue.atoms]) == set(["CA","C","O"]):
                 residue.name="ACE"
                 for atom in residue.atoms:
                     if atom.name == "CA":
                         atom.name = "CH3"
-            if set([x.name for x in residue.atoms]) == [set(["CA","CD","N"])]:
+            # If it's a proline
+            if set([x.name for x in residue.atoms]) == set(["CA","CD","N"]):
                 residue.name = "NME"
                 for atom in residue.atoms:
                     if atom.name == "CA":
