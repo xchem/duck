@@ -1,4 +1,11 @@
 import requests
+from rdkit import Chem
+from rdkit.Chem import AllChem
+
+def clean_up(mol_block):
+    mol = Chem.MolFromMolBlock(mol_block,removeHs=False)
+    return Chem.MolToMolBlock(AllChem.AddHs(mol,addCoords=True))
+
 def get_from_prot_code(prot_code):
     out_prot = prot_code+"_apo.pdb"
     out_mol = prot_code+".mol"
@@ -8,7 +15,7 @@ def get_from_prot_code(prot_code):
     pdb_id = result["id"]
     r = requests.get("https://fragalysis.apps.xchem.diamond.ac.uk/api/molecules/",params={"prot_id":pdb_id})
     out_json = r.json()["results"][0]
-    sdf_info = out_json["sdf_info"]
+    sdf_info = clean_up(out_json["sdf_info"])
     out_f = open(out_mol,"w")
     out_f.write(sdf_info)
     out_f.close()
