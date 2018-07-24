@@ -115,7 +115,7 @@ def convert_to_ace_nme(subset):
 
 def remove_prot_buffers_alt_locs(prot_file):
     output_file = "no_buffer_altlocs.pdb"
-    solvents = ["NA","CL","SO4","EDO","FMT","P04"]
+    solvents = ["NA","CL","SO4","EDO","FMT","P04","DMS","EPE"]
     # Remove hydrogens and solvents and buffers
     protein = parmed.load_file(prot_file)["!(:HOH,"+",".join(solvents)+")"]["!(:=@H=)"]
     protein.write_pdb(output_file, altlocs="first")
