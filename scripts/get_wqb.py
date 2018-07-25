@@ -1,5 +1,7 @@
 import numpy as np
 import os,sys
+import  matplotlib
+matplotlib.use("agg")
 import matplotlib.pyplot as plt
 
 def get_wqb_simple(file_duck_dat):
