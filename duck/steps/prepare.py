@@ -2,9 +2,11 @@ import sys,os
 from rdkit.Chem import AllChem
 from rdkit import Chem
 
-def prep_lig(mol_file,prefix):
+def prep_lig(mol_file,prefix,addHs=True):
     # Accept readily protonated molecule
     rd_mol = Chem.MolFromMolFile(mol_file,removeHs=False)
+    # Add extra hydrogens
+    rd_mol = AllChem.AddHs(rd_mol, addCoords=True)
     net_charge = AllChem.GetFormalCharge(rd_mol)
     # Defined the final out file
     out_file = prefix + "_params.mol2"
