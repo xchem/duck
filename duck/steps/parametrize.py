@@ -9,22 +9,22 @@ import pickle
 from duck.utils.gen_system import generateSMIRNOFFStructureRDK
 
 
-def find_box_size(input_file="complex.pdb",add_factor=20):
+def find_box_size(input_file="complex.pdb", add_factor=20):
     complex = parmed.load_file(input_file)
     x_coords = [x[0] for x in complex.positions]
     y_coords = [x[1] for x in complex.positions]
     z_coords = [x[2] for x in complex.positions]
-    x_size = abs(max(x_coords)-min(x_coords))
-    y_size = abs(max(y_coords)-min(y_coords))
-    z_size = abs(max(z_coords)-min(z_coords))
-    val_in_ang = max(x_size,y_size,z_size) + add_factor*unit.angstrom
-    return int(val_in_ang.value_in_unit(unit.angstrom))+1
+    x_size = abs(max(x_coords) - min(x_coords))
+    y_size = abs(max(y_coords) - min(y_coords))
+    z_size = abs(max(z_coords) - min(z_coords))
+    val_in_ang = max(x_size, y_size, z_size) + add_factor * unit.angstrom
+    return int(val_in_ang.value_in_unit(unit.angstrom)) + 1
 
 
-def prepare_system(ligand_file, protein_file, forcefield_str='amber99sb.xml'):
+def prepare_system(ligand_file, protein_file, forcefield_str="amber99sb.xml"):
     print("Preparing ligand")
     lig_rdk = Chem.MolFromMol2File(ligand_file, sanitize=False)
-    lig_rdk.SetProp('_Name', 'LIG')
+    lig_rdk.SetProp("_Name", "LIG")
     ligand_pmd = generateSMIRNOFFStructureRDK(lig_rdk)
     print("Fixing protein")
     protein = parmed.load_file(protein_file)
@@ -33,7 +33,9 @@ def prepare_system(ligand_file, protein_file, forcefield_str='amber99sb.xml'):
     protein = parmed.load_file("fixed.pdb")["!(:HOH,NA,CL)"]  # remove ions and water
     forcefield = app.ForceField(forcefield_str)
     protein_system = forcefield.createSystem(protein.topology)
-    protein_pmd = parmed.openmm.load_topology(protein.topology, protein_system, protein.positions)
+    protein_pmd = parmed.openmm.load_topology(
+        protein.topology, protein_system, protein.positions
+    )
     protein_pmd.save("protein_prepared.pdb", overwrite=True)
     prot_lig_pmd = protein_pmd + ligand_pmd
     prot_lig_pmd.save("complex.pdb", overwrite=True)
@@ -43,22 +45,29 @@ def prepare_system(ligand_file, protein_file, forcefield_str='amber99sb.xml'):
     # scaling factor to somehow ensure no interaction with periodic image
     scaling_factor = 1.0
     box_size = find_box_size("complex.pdb")
-    fixer.addSolvent(scaling_factor * box_size * openmm.Vec3(0.1, 0.1, 0.1), positiveIon='Na+', negativeIon='Cl-',
-                     ionicStrength=0.1 * unit.molar)
-    app.PDBFile.writeFile(fixer.topology, fixer.positions, open('complex_solvated.pdb', 'w'))
+    fixer.addSolvent(
+        scaling_factor * box_size * openmm.Vec3(0.1, 0.1, 0.1),
+        positiveIon="Na+",
+        negativeIon="Cl-",
+        ionicStrength=0.1 * unit.molar,
+    )
+    app.PDBFile.writeFile(
+        fixer.topology, fixer.positions, open("complex_solvated.pdb", "w")
+    )
     print("Solvation done")
     print("Parametrizing ions")
-    complex = parmed.load_file('./complex_solvated.pdb')
+    complex = parmed.load_file("./complex_solvated.pdb")
     ions = complex["(:NA,CL)"]
     forcefield = app.ForceField(forcefield_str)
     ions_system = forcefield.createSystem(ions.topology)
     ions_pmd = parmed.openmm.load_topology(ions.topology, ions_system, ions.positions)
     print("Parametrizing ions done")
-    prot_lig_ion_pmd = protein_pmd + ligand_pmd + ions_pmd
     print("Parametrizing solvent")
     solvent = complex["(:HOH)"]
     num_solvent = len(solvent.residues)
-    prm_top_water_path = pkg_resources.resource_filename('duck', "parameters/waters/water.prmtop")
+    prm_top_water_path = pkg_resources.resource_filename(
+        "duck", "parameters/waters/water.prmtop"
+    )
     solvent_pmd = parmed.load_file(prm_top_water_path)
     solvent_pmd *= num_solvent
     solvent_pmd.positions = solvent.positions

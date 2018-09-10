@@ -40,7 +40,7 @@ setup(
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Build Tools",
         # Pick your license as you wish (should match "license" above)
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache Software License",
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
         "Programming Language :: Python :: 2",
@@ -73,7 +73,9 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
-    package_data={"duck": ["parameters/*.offxml","parameters/waters/*","parameters/tleap/*"]},
+    package_data={
+        "duck": ["parameters/*.offxml", "parameters/waters/*", "parameters/tleap/*"]
+    },
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages. See:
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
@@ -82,6 +84,10 @@ setup(
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
     # pip to create the appropriate form of executable for the target platform.
-    entry_points={"console_scripts": ["frag_duck=scripts.run_full_from_fragalysis:main",
-                                      "get_wqb=scripts.get_wqb:main"]},
+    entry_points={
+        "console_scripts": [
+            "frag_duck=scripts.run_full_from_fragalysis:main",
+            "get_wqb=scripts.get_wqb:main",
+        ]
+    },
 )

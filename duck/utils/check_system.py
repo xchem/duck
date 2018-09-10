@@ -12,8 +12,6 @@ def check_pot_eng(pot_eng):
     standard_dev = pot_eng.std()
     # Maximum
     max_eng = max(pot_eng)
-    # Minimum
-    min_eng = min(pot_eng)
     # The max variance
     max_diff = max(abs(np.diff(pot_eng)))
     # Anthony Bradley basically made up these numbers
@@ -29,7 +27,8 @@ def check_pot_eng(pot_eng):
         return False
     return True
 
-def check_if_equlibrated(input_file,column,header=True,delimiter=","):
+
+def check_if_equlibrated(input_file, column, header=True, delimiter=","):
     """
 
     :param input_file:
