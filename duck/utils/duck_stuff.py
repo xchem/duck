@@ -68,14 +68,14 @@ def loadPickle(fname='complex_system.pickle'):
 def getHeavyAtomsInSystem(combined_pmd):
     Chunk_Heavy_Atoms=[]
     for atom_i in combined_pmd.topology.atoms():
-        if atom_i.residue.name not in ('HOH', 'WAT', 'IP3', 'LIG', 'Cs+', 'K+', 'Rb+', 'Li+', 'Na+', 'IP', 'Cl-', 'IM', 'IB') and atom_i.name[0] != 'H':
+        if atom_i.residue.name not in ('HOH', 'WAT', 'IP3', 'LIG', 'UNL',  'Cs+', 'K+', 'Rb+', 'Li+', 'Na+', 'IP', 'Cl-', 'IM', 'IB') and atom_i.name[0] != 'H':
             Chunk_Heavy_Atoms.append(atom_i.index)
     return(Chunk_Heavy_Atoms)
 
 def getCAAtomsInSystem(combined_pmd):
     Chunk_Heavy_Atoms=[]
     for atom_i in combined_pmd.topology.atoms():
-        if atom_i.residue.name not in ('HOH', 'WAT', 'IP3', 'LIG', 'Cs+', 'K+', 'Rb+', 'Li+', 'Na+', 'IP', 'Cl-', 'IM', 'IB') and atom_i.name[0] != 'CA':
+        if atom_i.residue.name not in ('HOH', 'WAT', 'IP3', 'LIG', 'UNL', 'Cs+', 'K+', 'Rb+', 'Li+', 'Na+', 'IP', 'Cl-', 'IM', 'IB') and atom_i.name[0] != 'CA':
             Chunk_Heavy_Atoms.append(atom_i.index)
     return(Chunk_Heavy_Atoms)
 

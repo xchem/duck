@@ -19,14 +19,14 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version="0.0.30",
+    version="0.1.0",
     description="Library for running Dynamic Undokcing",
     long_description=long_description,
     # The project's main homepage.
     url="https://github.com/xchem/duck.git",
     # Author details
     author="Anthony Bradley",
-    author_email="anthony.bradley@diamond.ac.uk",
+    author_email="anthony.richard.bradley@gmail.com",
     # Choose your license
     license="Apache 2.0",
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
