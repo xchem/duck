@@ -1,12 +1,27 @@
+[![Build Status](https://travis-ci.org/abradle/duck.svg?branch=master)](https://travis-ci.org/abradle/duck)
+[![stable](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
+[![Version](http://img.shields.io/badge/version-0.1.0-blue.svg?style=flat)](https://github.com/abradle/duck)
+[![License](http://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat)](https://github.com/abradle/duck/blob/master/LICENSE.txt)
+
 # Installation
+
+## Conda
 
 Make a fresh Conda environment
 ```
-git clone https://github.com/xchem/duck
+git clone https://github.com/abradle/duck
 cd duck
 conda env create -f environment.yaml 
 ```
-# Running
+
+## Docker
+
+Pull down the latest image
+```
+docker pull abradle/duck
+```
+
+#### Running
 
 Activate conda and run like this:
 ```
@@ -14,7 +29,12 @@ source activate duck
 frag_duck run.yaml
 ```
 
-where run.yaml is a fiel like the following:
+Or with Docker run like this:
+```
+docker run -it -v $PWD:/data abradle/duck /bin/bash -c "frag_duck /data/run.yaml"
+```
+
+where run.yaml is a file like the following:
 
 ```
 prot_code: '1n2v'

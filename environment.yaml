@@ -1,14 +1,15 @@
 name: duck
 channels:
-  - abradle
   - omnia
   - conda-forge
-  - rdkit
+  - defaults
 dependencies:
   - python=3.6
   - yank
-  - rdkit=2018.03.2
+  - rdkit==2018.09.01
   - pdbfixer
-  - openforcefield=swang
+  - openforcefield=0.4.0
+  - boto3
+  - cudatoolkit=9.2
   - pip:
-    - duck-xchem
+    - nose

@@ -17,7 +17,7 @@ def check_same(atom, chain, res_name, res_number, atom_name):
 
 def is_lig(atom):
     # Non-hydrogen
-    if atom.residue.name == "LIG" and atom.atomic_number > 1:
+    if atom.residue.name == "UNL" and atom.atomic_number > 1:
         return True
 
 
@@ -48,6 +48,7 @@ def find_result(res_atom=None, prot_file=None, combined_pmd=None):
     distance_atom_2.sort(key=operator.itemgetter(1))
     # These are the interactions to find
     index_one = distance_atom_1[0][0]
+    # The ligand one
     index_two = distance_atom_2[0][0]
     out_res = [index_one, index_two, math.sqrt(distance_atom_2[0][1])]
     return index_one, index_two, out_res, distance_atom_2[0][1]
